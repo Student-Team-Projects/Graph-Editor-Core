@@ -43,7 +43,23 @@ class GraphBuilderTest {
         builder.build();
 
         builder.goToPrevBuild();
-        Graph new_graph = builder.build();
+        Assertions.assertTrue(graph.equals(builder.build()));
+    }
+
+    @Test
+    void redoTest() {
+        GraphBuilder builder = new GraphBuilder(3);
+        builder.addEdge(0, 1);
+        builder.addEdge(1, 2);
+        builder.addEdge(2, 0);
+
+        builder.build();
+        builder.addVertex();
+        builder.addEdge(3, 0);
+        Graph graph = builder.build();
+
+        builder.goToPrevBuild();
+        builder.undoGoingToPrevBuild();
         Assertions.assertTrue(graph.equals(builder.build()));
     }
 }

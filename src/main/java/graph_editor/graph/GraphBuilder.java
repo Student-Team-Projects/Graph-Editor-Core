@@ -51,6 +51,12 @@ public class GraphBuilder {
         }
     }
 
+    public void undoGoingToPrevBuild() {
+        if (cur_version + 1 < graph_versions.size()) {
+            cur_version++;
+        }
+    }
+
     private void unwindChangeStack() {
         if (cur_version == graph_versions.size() - 1) {
             return;
