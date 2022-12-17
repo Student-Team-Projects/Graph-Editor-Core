@@ -2,7 +2,7 @@ package graph_editor.draw;
 
 import graph_editor.visual.*;
 import graph_editor.graph.*;
-import graph_editor.geometry.Point;
+import graph_editor.geometry.*;
 
 import java.util.*;
 
@@ -14,6 +14,19 @@ public abstract class AbstractGraphDrawer implements GraphDrawer {
         visited_nodes = new HashSet<Vertex>();
 
         dfsDraw(graph.getVertices().get(0));
+    }
+
+    @Override
+    public List<Geometry> getPrimitiveGrometries(GraphVisualization visual) {
+        List<Geometry> geometries = new ArrayList<>();
+        for (Vertex vertex : visual.getGraph().getVertices()) {
+            geometries.add(new Circle(visual.getVertexPoint(vertex), CIRCLE_RADIUS));
+        }
+        for (Edge edge : visual.getGraph().getEdges()) {
+            geometries.add(new Line(
+                visual.getVertexPoint(edge.getSource()), visual.getVertexPoint(edge.getTarget())));
+        }
+        return geometries;
     }
 
     private void dfsDraw(Vertex v) {
@@ -33,6 +46,8 @@ public abstract class AbstractGraphDrawer implements GraphDrawer {
             drawLineTo(next_point);
         }
     }
+
+    protected final double CIRCLE_RADIUS = 20;
 
     abstract void moveCursorTo(Point p);
     abstract void drawLineTo(Point p);

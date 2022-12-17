@@ -1,7 +1,7 @@
 package graph_editor.geometry;
 
 // Immutable.
-public class Point {
+public class Point implements Geometry {
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
