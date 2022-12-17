@@ -9,6 +9,12 @@ class VertexImpl implements Vertex {
         edges = new ArrayList<>();
     }
 
+    VertexImpl(Vertex other) {
+        this.index = other.getIndex();
+        edges = new ArrayList<>();
+        edges.addAll(other.getEdges());
+    }
+
     void addEdge(Edge edge) {
         edges.add(edge);
     }
