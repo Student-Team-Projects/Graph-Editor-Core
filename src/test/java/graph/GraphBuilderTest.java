@@ -9,9 +9,9 @@ class GraphBuilderTest {
     @Test
     void buildSimpleGraph() {
         GraphBuilder builder = new GraphBuilder(3);
-        builder.addEdge(0, 1);
-        builder.addEdge(1, 2);
-        builder.addEdge(2, 0);
+        builder.addBidirectionalEdge(0, 1);
+        builder.addBidirectionalEdge(1, 2);
+        builder.addBidirectionalEdge(2, 0);
 
         Graph graph = builder.build();
         Assertions.assertEquals(graph.getVertices().size(), 3);
@@ -20,9 +20,9 @@ class GraphBuilderTest {
     @Test
     void graphIsImmutable() {
         GraphBuilder builder = new GraphBuilder(3);
-        builder.addEdge(0, 1);
-        builder.addEdge(1, 2);
-        builder.addEdge(2, 0);
+        builder.addBidirectionalEdge(0, 1);
+        builder.addBidirectionalEdge(1, 2);
+        builder.addBidirectionalEdge(2, 0);
 
         Graph graph = builder.build();
         builder.addVertex();
@@ -33,13 +33,13 @@ class GraphBuilderTest {
     @Test
     void undoTest() {
         GraphBuilder builder = new GraphBuilder(3);
-        builder.addEdge(0, 1);
-        builder.addEdge(1, 2);
-        builder.addEdge(2, 0);
+        builder.addBidirectionalEdge(0, 1);
+        builder.addBidirectionalEdge(1, 2);
+        builder.addBidirectionalEdge(2, 0);
 
         Graph graph = builder.build();
         builder.addVertex();
-        builder.addEdge(3, 0);
+        builder.addBidirectionalEdge(3, 0);
         builder.build();
 
         builder.goToPrevBuild();
@@ -49,13 +49,13 @@ class GraphBuilderTest {
     @Test
     void redoTest() {
         GraphBuilder builder = new GraphBuilder(3);
-        builder.addEdge(0, 1);
-        builder.addEdge(1, 2);
-        builder.addEdge(2, 0);
+        builder.addBidirectionalEdge(0, 1);
+        builder.addBidirectionalEdge(1, 2);
+        builder.addBidirectionalEdge(2, 0);
 
         builder.build();
         builder.addVertex();
-        builder.addEdge(3, 0);
+        builder.addBidirectionalEdge(3, 0);
         Graph graph = builder.build();
 
         builder.goToPrevBuild();

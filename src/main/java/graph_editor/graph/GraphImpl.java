@@ -2,8 +2,11 @@ package graph_editor.graph;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.io.*;
 
-class GraphImpl implements Graph {
+class GraphImpl implements Graph, Serializable {
+    private static final long serialVersionUID = 1L;
+
     GraphImpl(List<Vertex> vertices) {
         this.vertices = new ArrayList<>();
         this.vertices.addAll(vertices);
@@ -43,6 +46,46 @@ class GraphImpl implements Graph {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(vertices.size());
+        builder.append("\n");
+        builder.append(edges.size());
+        builder.append("\n");
+        for (Edge e : edges) {
+            builder.append(e.getSource().getIndex() + " " + e.getTarget().getIndex() + "\n");
+        }
+        return builder.toString();
+    }
+
+    void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeLong(serialVersionUID);
+        oos.writeInt(vertices.size());
+        oos.writeInt(edges.size());
+        for (Edge e : edges) {
+            oos.writeInt(e.getSource().getIndex());
+            oos.writeInt(e.getTarget().getIndex());
+        }
+    }
+
+    void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        long serialUID = ois.readLong();
+        if (serialUID != serialVersionUID) {
+            throw new IOException("This is an older serialization version.");
+        }
+
+        int num_vertices = ois.readInt();
+        GraphBuilder builder = new GraphBuilder(num_vertices);
+        int num_edges = ois.readInt();
+        for (int i = 0; i < num_edges; i++) {
+            builder.addEdge(ois.readInt(), ois.readInt());
+        }
+        Graph graph = builder.build();
+        vertices = graph.getVertices();
+        edges = graph.getEdges();
     }
 
     private List<Edge> edges;

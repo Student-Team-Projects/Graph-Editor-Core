@@ -2,6 +2,7 @@ package graph_editor.graph;
 
 import java.util.*;
 import java.lang.*;
+import java.io.*;
 import java.util.stream.Collectors;
 
 public class GraphBuilder {
@@ -28,9 +29,14 @@ public class GraphBuilder {
         unwindChangeStack();
 
         Edge edge = new EdgeImpl(vertices.get(source_index), vertices.get(target_index));
-        Edge rev_edge = new EdgeImpl(vertices.get(target_index), vertices.get(source_index));
         vertices.get(source_index).addEdge(edge);
-        vertices.get(target_index).addEdge(rev_edge);
+    }
+
+    public void addBidirectionalEdge(int source_index, int target_index) {
+        addEdge(source_index, target_index);
+        if (source_index != target_index) {
+            addEdge(target_index, source_index);
+        }
     }
 
     public Graph build() {
@@ -43,6 +49,16 @@ public class GraphBuilder {
         graph_versions.add(graph);
         cur_version = graph_versions.size() - 1;
         return graph;
+    }
+
+    public static Graph readFromStream(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        GraphImpl graph = new GraphImpl(new ArrayList<>());
+        graph.readObject(ois);
+        return graph;
+    }
+
+    public static void writeToStream(Graph graph, ObjectOutputStream oos) throws ClassNotFoundException, IOException {
+        ((GraphImpl)graph).writeObject(oos);
     }
 
     public void goToPrevBuild() {
