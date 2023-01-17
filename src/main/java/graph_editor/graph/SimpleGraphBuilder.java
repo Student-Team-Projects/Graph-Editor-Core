@@ -11,8 +11,10 @@ public class SimpleGraphBuilder {
         }
     }
 
-    public void addVertex() {
-        vertices.add(new VertexImpl(vertices.size()));
+    public Vertex addVertex() {
+        VertexImpl vertex = new VertexImpl(vertices.size());
+        vertices.add(vertex);
+        return vertex;
     }
 
     public void addEdge(int source_index, int target_index) {

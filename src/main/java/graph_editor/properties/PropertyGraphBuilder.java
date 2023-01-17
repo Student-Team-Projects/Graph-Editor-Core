@@ -1,7 +1,6 @@
 package graph_editor.properties;
 
 import graph_editor.graph.Graph;
-import graph_editor.graph.GraphBuilder;
 import graph_editor.graph.GraphElement;
 import graph_editor.graph.SimpleGraphBuilder;
 

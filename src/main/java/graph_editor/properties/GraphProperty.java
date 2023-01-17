@@ -6,6 +6,7 @@ import graph_editor.graph.GraphElement;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class GraphProperty {
     private final String name;
@@ -24,5 +25,9 @@ public class GraphProperty {
 
     void addElementProperty(GraphElement element, String value) {
         values.put(element, value);
+    }
+
+    Set<Map.Entry<GraphElement, String>> getElementsWithProperty() {
+        return values.entrySet();
     }
 }
