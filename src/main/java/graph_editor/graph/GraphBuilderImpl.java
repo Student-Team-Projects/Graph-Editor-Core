@@ -5,8 +5,8 @@ import java.lang.*;
 import java.io.*;
 import java.util.stream.Collectors;
 
-public class GraphBuilder {
-    public GraphBuilder(int vertex_count) {
+public class GraphBuilderImpl {
+    public GraphBuilderImpl(int vertex_count) {
         graph_versions = new ArrayList<>();
 
         vertices = new ArrayList<VertexImpl>();

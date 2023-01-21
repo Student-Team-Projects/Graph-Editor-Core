@@ -3,12 +3,10 @@ package graph_editor.graph;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
-import graph_editor.graph.*;
-
 class GraphBuilderTest {
     @Test
     void buildSimpleGraph() {
-        GraphBuilder builder = new GraphBuilder(3);
+        GraphBuilderImpl builder = new GraphBuilderImpl(3);
         builder.addBidirectionalEdge(0, 1);
         builder.addBidirectionalEdge(1, 2);
         builder.addBidirectionalEdge(2, 0);
@@ -19,7 +17,7 @@ class GraphBuilderTest {
 
     @Test
     void graphIsImmutable() {
-        GraphBuilder builder = new GraphBuilder(3);
+        GraphBuilderImpl builder = new GraphBuilderImpl(3);
         builder.addBidirectionalEdge(0, 1);
         builder.addBidirectionalEdge(1, 2);
         builder.addBidirectionalEdge(2, 0);
@@ -32,7 +30,7 @@ class GraphBuilderTest {
 
     @Test
     void undoTest() {
-        GraphBuilder builder = new GraphBuilder(3);
+        GraphBuilderImpl builder = new GraphBuilderImpl(3);
         builder.addBidirectionalEdge(0, 1);
         builder.addBidirectionalEdge(1, 2);
         builder.addBidirectionalEdge(2, 0);
@@ -48,7 +46,7 @@ class GraphBuilderTest {
 
     @Test
     void redoTest() {
-        GraphBuilder builder = new GraphBuilder(3);
+        GraphBuilderImpl builder = new GraphBuilderImpl(3);
         builder.addBidirectionalEdge(0, 1);
         builder.addBidirectionalEdge(1, 2);
         builder.addBidirectionalEdge(2, 0);

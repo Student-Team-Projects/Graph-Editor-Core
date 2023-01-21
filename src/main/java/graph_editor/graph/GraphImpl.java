@@ -78,7 +78,7 @@ class GraphImpl implements Graph, Serializable {
         }
 
         int num_vertices = ois.readInt();
-        GraphBuilder builder = new GraphBuilder(num_vertices);
+        GraphBuilderImpl builder = new GraphBuilderImpl(num_vertices);
         int num_edges = ois.readInt();
         for (int i = 0; i < num_edges; i++) {
             builder.addEdge(ois.readInt(), ois.readInt());
