@@ -2,7 +2,7 @@ package graph_editor.graph;
 
 import java.util.ArrayList;
 
-public class SimpleGraphBuilder {
+public class SimpleGraphBuilder implements GraphBuilder {
     private final ArrayList<VertexImpl> vertices;
     public SimpleGraphBuilder(int vertex_count) {
         vertices = new ArrayList<>();
@@ -11,10 +11,10 @@ public class SimpleGraphBuilder {
         }
     }
 
-    public Vertex addVertex() {
+    public void addVertex() {
         VertexImpl vertex = new VertexImpl(vertices.size());
         vertices.add(vertex);
-        return vertex;
+//        return vertex;
     }
 
     public void addEdge(int source_index, int target_index) {
