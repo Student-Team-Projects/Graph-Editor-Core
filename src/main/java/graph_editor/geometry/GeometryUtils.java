@@ -52,21 +52,6 @@ public class GeometryUtils {
         return new Point(x/2+0.5, y/2+0.5);
     }
 
-    public static Point getPointBipartite(int index, int left, int right) {
-        int spaces = Math.max(right, left) - 1;
-        double dist = spaces == 0 ? 1.0 : 1.0/spaces;
-
-        Point result;
-        if (index >= left) {
-            double rightStart = right>left ? 1 : 1-(left-right)/2.0*dist;
-            result = new Point(1, rightStart - dist*(index-left));
-        } else {
-            double leftStart = left>right ? 1 : 1-(right-left)/2.0*dist;
-            result = new Point (0, leftStart - dist*index);
-        }
-        return result;
-    }
-
     public static Point getPointBinaryTree(int index, int layers) {
         int layer = log2int(index+1);
         int ind = index - (1 << layer) + 1;
