@@ -3,11 +3,11 @@ package graph_editor.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphStackImpl implements GraphStack {
-    private final List<Graph> stack;
+public class VersionStackImpl<T> implements VersionStack<T> {
+    private final List<T> stack;
     private int pointer;
 
-    public GraphStackImpl(Graph initial) {
+    public VersionStackImpl(T initial) {
         this.stack = new ArrayList<>();
         stack.add(initial);
         this.pointer = 0;
@@ -21,9 +21,9 @@ public class GraphStackImpl implements GraphStack {
         pointer = Math.min(pointer + 1, stack.size() - 1);
     }
 
-    public void push(Graph graph) {
+    public void push(T element) {
         unwind();
-        stack.add(graph);
+        stack.add(element);
     }
 
     public boolean isUndoPossible() {
@@ -32,8 +32,8 @@ public class GraphStackImpl implements GraphStack {
     public boolean isRedoPossible() {
         return pointer != stack.size() - 1;
     }
-    public Graph getCurrentGraph() { return stack.get(pointer); }
-    public Iterable<Graph> getGraphStack() { return stack; }
+    public T getCurrent() { return stack.get(pointer); }
+    public Iterable<T> getStack() { return stack; }
 
     private void unwind() {
         while(stack.size() - 1 > pointer) {

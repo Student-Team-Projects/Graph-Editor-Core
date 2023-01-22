@@ -4,19 +4,19 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class ObservableGraphStackImpl implements GraphStack.ObservableGraphStack {
-    private final Collection<Observer> observers;
-    private final GraphStack stack;
+public class ObservableStackImpl<T> implements VersionStack.ObservableStack<T> {
+    private final Collection<Observer<T>> observers;
+    private final VersionStack<T> stack;
 
-    public ObservableGraphStackImpl(GraphStack stack) {
+    public ObservableStackImpl(VersionStack<T> stack) {
         this.observers = Collections.synchronizedSet(new HashSet<>());
         this.stack = stack;
     }
 
     @Override
-    public void addObserver(Observer observer) { observers.add(observer); }
+    public void addObserver(Observer<T> observer) { observers.add(observer); }
     @Override
-    public void removeObserver(Observer observer) { observers.remove(observer); }
+    public void removeObserver(Observer<T> observer) { observers.remove(observer); }
 
     @Override
     public void undo() {
@@ -31,8 +31,8 @@ public class ObservableGraphStackImpl implements GraphStack.ObservableGraphStack
     }
 
     @Override
-    public void push(Graph graph) {
-        stack.push(graph);
+    public void push(T element) {
+        stack.push(element);
         notifyObservers();
     }
 
@@ -47,12 +47,12 @@ public class ObservableGraphStackImpl implements GraphStack.ObservableGraphStack
     }
 
     @Override
-    public Graph getCurrentGraph() { return stack.getCurrentGraph(); }
+    public T getCurrent() { return stack.getCurrent(); }
 
     @Override
-    public Iterable<Graph> getGraphStack() { return stack.getGraphStack(); }
+    public Iterable<T> getStack() { return stack.getStack(); }
 
     private void notifyObservers() {
-        observers.forEach(o -> o.notifyChange(getCurrentGraph()));
+        observers.forEach(o -> o.notifyChange(getCurrent()));
     }
 }
