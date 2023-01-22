@@ -23,7 +23,7 @@ class GraphImpl implements Graph, Serializable {
 
     @Override
     public List<Vertex> getVertices() {
-        return vertices;
+        return Collections.unmodifiableList(vertices);
     }
 
     @Override
