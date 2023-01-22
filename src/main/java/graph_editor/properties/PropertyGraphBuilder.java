@@ -23,6 +23,6 @@ public class PropertyGraphBuilder extends SimpleGraphBuilder {
     @Override
     public PropertySupportingGraph build() {
         Graph proper = super.build();
-        return new PropertySupportingGraph(proper, properties);
+        return new PropertySupportingGraphImpl(proper, properties);
     }
 }
