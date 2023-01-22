@@ -1,9 +1,8 @@
 package graph_editor.properties;
 
-import graph_editor.graph.Graph;
 import graph_editor.graph.GraphElement;
 
-import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +26,10 @@ public class GraphProperty {
         values.put(element, value);
     }
 
-    Set<Map.Entry<GraphElement, String>> getElementsWithProperty() {
+    Collection<GraphElement> graphElementsWithProperty() {
+        return values.keySet();
+    }
+    Set<Map.Entry<GraphElement, String>> getEntriesWithProperty() {
         return values.entrySet();
     }
 }

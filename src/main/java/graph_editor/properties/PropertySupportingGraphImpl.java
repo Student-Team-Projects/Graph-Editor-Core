@@ -76,7 +76,7 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
         oos.writeInt(properties.values().size());
         for (GraphProperty property : properties.values()) {
             oos.writeObject(property.getName());
-            var entries = property.getElementsWithProperty();
+            var entries = property.getEntriesWithProperty();
             oos.writeInt(entries.size());
             for (var entry : entries) {
                 GraphElement element = entry.getKey();
