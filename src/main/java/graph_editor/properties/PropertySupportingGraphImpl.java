@@ -6,18 +6,24 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PropertySupportingGraphImpl implements PropertySupportingGraph, Serializable {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
     private Graph properGraph;
     private Map<String, GraphProperty> properties;
+    private final Map<Integer, ExtendedGraphElement> extendedGraphElements = new HashMap<>();
+    private final Map<ExtendedGraphElement, Integer> inverseMap = new HashMap<>();
+    private int extendedId = 0;
 
-    PropertySupportingGraphImpl(Graph properGraph, Map<String, GraphProperty> properties) {
+    PropertySupportingGraphImpl(Graph properGraph, Map<String, GraphProperty> properties, Iterable<ExtendedGraphElement> extendedGraphElements) {
         this.properGraph = properGraph;
         this.properties = properties;
+        extendedGraphElements.forEach(element -> {
+            this.extendedGraphElements.put(extendedId, element);
+            this.inverseMap.put(element, extendedId);
+            extendedId++;
+        });
     }
 
     @Override
@@ -28,6 +34,11 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
     @Override
     public List<Vertex> getVertices() {
         return properGraph.getVertices();
+    }
+
+    @Override
+    public Collection<ExtendedGraphElement> getExtendedElements() {
+        return Collections.unmodifiableCollection(extendedGraphElements.values());
     }
 
     @Override
@@ -57,6 +68,11 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
     void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
         oos.writeObject(properGraph);
+        oos.writeInt(extendedGraphElements.size());
+        for (var entry : extendedGraphElements.entrySet()) {
+            oos.writeInt(entry.getKey());
+            oos.writeObject(entry.getValue());
+        }
         oos.writeInt(properties.values().size());
         for (GraphProperty property : properties.values()) {
             oos.writeObject(property.getName());
@@ -73,9 +89,9 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
                     oos.writeInt(e.getTarget().getIndex());
                 } else if (element instanceof ExtendedGraphElement) {
                     oos.writeObject(Tag.extendedTag);
-                    oos.writeObject(element);
+                    oos.writeInt(inverseMap.get(element));
                 } else {
-                    throw new IOException(element + "not serializable");
+                    throw new IOException(element + " is not serializable");
                 }
                 oos.writeObject(entry.getValue());
             }
@@ -88,6 +104,15 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
             throw new IOException("Incorrect serialization version: " + serialUID + ", expected " + serialVersionUID);
         }
         properGraph = (Graph) ois.readObject();
+        int extendedElementsNumber = ois.readInt();
+        for (int i = 0; i < extendedElementsNumber; i++) {
+            int elementId = ois.readInt();
+            var element = (ExtendedGraphElement) ois.readObject();
+            extendedGraphElements.put(elementId, element);
+            inverseMap.put(element, elementId);
+            if (extendedId <= elementId) { extendedId = elementId + 1; }
+        }
+
         properties = new HashMap<>();
         int propertiesNumber = ois.readInt();
         for (int i = 0; i < propertiesNumber; i++) {
@@ -104,8 +129,8 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
                     int sourceIndex = ois.readInt();
                     int targetIndex = ois.readInt();
                     element = properGraph.getVertices().get(sourceIndex).getEdges().get(targetIndex);
-                } else if(tag.equals(Tag.extendedTag)) {
-                    element = (GraphElement) ois.readObject();
+                } else if (tag.equals(Tag.extendedTag)) {
+                    element = extendedGraphElements.get(ois.readInt());
                 } else {
                     throw new IOException("unexpected type of GraphElement");
                 }
