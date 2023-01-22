@@ -1,10 +1,10 @@
 package graph_editor.point_mapping;
 
 public class ScreenPoint {
-    private final int x;
-    private final int y;
+    private final float x;
+    private final float y;
 
-    public ScreenPoint(int x, int y) {
+    public ScreenPoint(float x, float y) {
         this.x = x;
         this.y = y;
     }
