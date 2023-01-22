@@ -17,14 +17,14 @@ public class PropertyGraphBuilder extends SimpleGraphBuilder {
         super(vertex_count);
     }
 
-    public void registerProperty(GraphProperty property) {
-        properties.put(property.getName(), property);
+    public void registerProperty(String property) {
+        properties.put(property, new GraphProperty(property));
     }
 
     public void addExtendedElement(ExtendedGraphElement element) { extendedGraphElements.add(element); }
 
-    public void addElementProperty(GraphElement element, GraphProperty property, String value) {
-        property.addElementProperty(element, value);
+    public void addElementProperty(GraphElement element, String propertyName, String value) {
+        properties.get(propertyName).addElementProperty(element, value);
     }
     @Override
     public PropertySupportingGraph build() {

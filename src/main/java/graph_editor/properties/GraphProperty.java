@@ -7,15 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class GraphProperty {
+class GraphProperty {
     private final String name;
     private Map<GraphElement, String> values = new HashMap<>();
 
-    public GraphProperty(String name) {
+    GraphProperty(String name) {
         this.name = name;
     }
 
-    public String getElementProperty(GraphElement element) {
+    String getElementProperty(GraphElement element) {
         return values.get(element);
     }
     String getName() {

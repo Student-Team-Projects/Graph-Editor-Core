@@ -42,13 +42,18 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
     }
 
     @Override
-    public GraphProperty getPropertyByName(String name) {
-        return properties.get(name);
+    public Iterable<String> getPropertiesNames() {
+        return properties.keySet();
     }
 
     @Override
-    public Iterable<String> getPropertiesNames() {
-        return properties.keySet();
+    public Iterable<GraphElement> getElementsWithProperty(String propertyName) {
+        return properties.get(propertyName).graphElementsWithProperty();
+    }
+
+    @Override
+    public String getPropertyValue(String propertyName, GraphElement element) {
+        return properties.get(propertyName).getElementProperty(element);
     }
 
     @Override
