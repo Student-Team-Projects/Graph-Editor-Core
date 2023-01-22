@@ -11,8 +11,8 @@ import java.util.*;
 import graph_editor.geometry.Point;
 
 // Only mutable in this package.
-class GraphVisualizationImpl implements GraphVisualization, Serializable {
-    GraphVisualizationImpl(Graph graph) {
+class GraphVisualizationImpl<T extends Graph> implements GraphVisualization<T>, Serializable {
+    GraphVisualizationImpl(T graph) {
         vertex_coord = new HashMap<Vertex, Point>();
         this.graph = graph;
     }
@@ -27,7 +27,7 @@ class GraphVisualizationImpl implements GraphVisualization, Serializable {
     }
 
     @Override
-    public Graph getGraph() {
+    public T getGraph() {
         return graph;
     }
 
@@ -37,7 +37,7 @@ class GraphVisualizationImpl implements GraphVisualization, Serializable {
     }
 
     private Map<Vertex, Point> vertex_coord; 
-    private Graph graph;
+    private T graph;
 
     void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
@@ -57,7 +57,7 @@ class GraphVisualizationImpl implements GraphVisualization, Serializable {
         if (serialUID != serialVersionUID) {
             throw new IOException("Incorrect serialization version: " + serialUID + ", expected " + serialVersionUID);
         }
-        graph = (Graph) ois.readObject();
+        graph = (T) ois.readObject();
         int size = ois.readInt();
         vertex_coord = new HashMap<>();
         var vertices = graph.getVertices();

@@ -6,8 +6,8 @@ import graph_editor.graph.*;
 import java.util.Map;
 
 // Immutable
-public interface GraphVisualization {
+public interface GraphVisualization<T extends Graph> {
     Point getVertexPoint(Vertex vertex);
-    Graph getGraph();
+    T getGraph();
     Map<Vertex, Point> getVisualization();
 }

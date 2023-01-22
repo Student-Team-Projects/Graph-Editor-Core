@@ -16,8 +16,8 @@ public class BuilderVisualizer implements GraphVisualizer, GraphVisualizationBui
     }
 
     @Override
-    public GraphVisualization generateVisual(Graph graph) {
-        GraphVisualizationImpl visualization = new GraphVisualizationImpl(graph);
+    public <T extends Graph> GraphVisualization<T> generateVisual(T graph) {
+        GraphVisualizationImpl<T> visualization = new GraphVisualizationImpl<T>(graph);
         verticesCoordinates.forEach(m -> visualization.setCoord(m.v, m.p));
         verticesCoordinates.clear();
         return visualization;

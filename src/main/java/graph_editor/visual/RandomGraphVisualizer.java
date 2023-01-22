@@ -12,14 +12,14 @@ public class RandomGraphVisualizer implements GraphVisualizer {
         return new RandomGraphVisualizer(width, height);
     }
 
-    public static GraphVisualization getVisualization(Graph graph, int width, int height) {
+    public static GraphVisualization<Graph> getVisualization(Graph graph, int width, int height) {
         RandomGraphVisualizer visualizer = new RandomGraphVisualizer(width, height);
         return visualizer.generateVisual(graph);
     }
 
     @Override
-    public GraphVisualization generateVisual(Graph graph) {
-        GraphVisualizationImpl visualization = new GraphVisualizationImpl(graph);
+    public <T extends Graph> GraphVisualization<T> generateVisual(T graph) {
+        GraphVisualizationImpl<T> visualization = new GraphVisualizationImpl<>(graph);
         for (Vertex vertex : graph.getVertices()) {
             visualization.setCoord(
                 vertex, new Point(rng.nextInt(width), rng.nextInt(height)));
