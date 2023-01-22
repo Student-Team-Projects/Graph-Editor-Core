@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,11 @@ public class PropertySupportingGraph implements Graph, PropertyRepository, Seria
     @Override
     public GraphProperty getPropertyByName(String name) {
         return properties.get(name);
+    }
+
+    @Override
+    public Iterable<String> getPropertiesNames() {
+        return properties.keySet();
     }
 
     @Override

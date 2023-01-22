@@ -4,4 +4,5 @@ import java.util.Map;
 
 public interface PropertyRepository {
     GraphProperty getPropertyByName(String name);
+    Iterable<String> getPropertiesNames();
 }
