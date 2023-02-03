@@ -8,7 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BuilderVisualizer implements GraphVisualizer, GraphVisualizationBuilder {
-    private record Mapping(Vertex v, Point p) { }
+    private static class Mapping {
+        private final Vertex v;
+        private final Point p;
+        private Mapping(Vertex v, Point p) {
+            this.v = v;
+            this.p = p;
+        }
+    }
     private final List<Mapping> verticesCoordinates = new ArrayList<>();
     @Override
     public void addCoordinates(Vertex v, Point p) {
