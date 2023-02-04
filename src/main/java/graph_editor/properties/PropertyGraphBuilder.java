@@ -10,11 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PropertyGraphBuilder extends SimpleGraphBuilder {
+public class PropertyGraphBuilder {
     private final Map<String, GraphProperty> properties = new HashMap<>();
     private final List<ExtendedGraphElement> extendedGraphElements = new ArrayList<>();
-    public PropertyGraphBuilder(int vertex_count) {
-        super(vertex_count);
+    private final Graph graph;
+
+    public PropertyGraphBuilder(Graph properGraph) {
+        this.graph = properGraph;
     }
 
     public void registerProperty(String property) {
@@ -26,9 +28,8 @@ public class PropertyGraphBuilder extends SimpleGraphBuilder {
     public void addElementProperty(GraphElement element, String propertyName, String value) {
         properties.get(propertyName).addElementProperty(element, value);
     }
-    @Override
+
     public PropertySupportingGraph build() {
-        Graph proper = super.build();
-        return new PropertySupportingGraphImpl(proper, properties, extendedGraphElements);
+        return new PropertySupportingGraphImpl(graph, properties, extendedGraphElements);
     }
 }

@@ -20,7 +20,7 @@ public class GraphGeneratorBipartiteClique implements GraphGenerator {
     }
 
     @Override
-    public GraphVisualization generate(List<Integer> parameters) {
+    public GraphVisualization<Graph> generate(List<Integer> parameters) {
         int left = parameters.get(0);
         int right = parameters.get(1);
         int verticesNumber = left + right;
