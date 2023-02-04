@@ -1,6 +1,7 @@
 package graph_editor.graph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 // Only for this package
 class VertexImpl implements Vertex {
@@ -31,7 +32,7 @@ class VertexImpl implements Vertex {
 
     @Override
     public List<Vertex> getAdjacent() {
-        return edges.stream().map(edge -> edge.getTarget()).toList();
+        return edges.stream().map(edge -> edge.getTarget()).collect(Collectors.toList());
     }
 
     @Override

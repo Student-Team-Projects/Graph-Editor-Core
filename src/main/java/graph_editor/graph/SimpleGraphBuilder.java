@@ -1,6 +1,7 @@
 package graph_editor.graph;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class SimpleGraphBuilder implements GraphBuilder {
     private final ArrayList<VertexImpl> vertices;
@@ -37,6 +38,6 @@ public class SimpleGraphBuilder implements GraphBuilder {
         return new GraphImpl(new ArrayList<>(vertices
                 .stream()
                 .map(VertexImpl::new)
-                .toList()));
+                .collect(Collectors.toList())));
     }
 }
