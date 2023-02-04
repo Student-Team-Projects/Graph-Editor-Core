@@ -24,6 +24,7 @@ public class VersionStackImpl<T> implements VersionStack<T> {
     public void push(T element) {
         unwind();
         stack.add(element);
+        pointer++;
     }
 
     public boolean isUndoPossible() {
