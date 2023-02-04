@@ -2,10 +2,7 @@ package graph_editor.visual;
 
 import graph_editor.graph.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 import graph_editor.geometry.Point;
@@ -39,7 +36,8 @@ class GraphVisualizationImpl<T extends Graph> implements GraphVisualization<T>, 
     private Map<Vertex, Point> vertex_coord; 
     private T graph;
 
-    void writeObject(ObjectOutputStream oos) throws IOException {
+    @Serial
+    private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
         oos.writeObject(graph);
 
@@ -52,7 +50,9 @@ class GraphVisualizationImpl<T extends Graph> implements GraphVisualization<T>, 
             oos.writeDouble(p.getY());
         }
     }
-    void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+
+    @Serial
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         long serialUID = ois.readLong();
         if (serialUID != serialVersionUID) {
             throw new IOException("Incorrect serialization version: " + serialUID + ", expected " + serialVersionUID);
@@ -67,5 +67,5 @@ class GraphVisualizationImpl<T extends Graph> implements GraphVisualization<T>, 
             vertex_coord.put(vertices.get(index), p);
         }
     }
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 }

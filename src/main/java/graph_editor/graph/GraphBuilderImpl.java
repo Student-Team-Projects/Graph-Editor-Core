@@ -45,20 +45,18 @@ public class GraphBuilderImpl {
             .stream()
             .map(v -> new VertexImpl(v))
             .map(v -> (Vertex)v)
-            .toList()));
+            .collect(Collectors.toList())));
         graph_versions.add(graph);
         cur_version = graph_versions.size() - 1;
         return graph;
     }
 
     public static Graph readFromStream(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        GraphImpl graph = new GraphImpl(new ArrayList<>());
-        graph.readObject(ois);
-        return graph;
+        return (Graph) ois.readObject();
     }
 
     public static void writeToStream(Graph graph, ObjectOutputStream oos) throws ClassNotFoundException, IOException {
-        ((GraphImpl)graph).writeObject(oos);
+        oos.writeObject(graph);
     }
 
     public void goToPrevBuild() {

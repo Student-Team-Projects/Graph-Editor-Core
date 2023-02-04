@@ -61,7 +61,8 @@ class GraphImpl implements Graph, Serializable {
         return builder.toString();
     }
 
-    void writeObject(ObjectOutputStream oos) throws IOException {
+    @Serial
+    private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
         oos.writeInt(vertices.size());
         oos.writeInt(edges.size());
@@ -71,7 +72,8 @@ class GraphImpl implements Graph, Serializable {
         }
     }
 
-    void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+    @Serial
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         long serialUID = ois.readLong();
         if (serialUID != serialVersionUID) {
             throw new IOException("This is an older serialization version.");

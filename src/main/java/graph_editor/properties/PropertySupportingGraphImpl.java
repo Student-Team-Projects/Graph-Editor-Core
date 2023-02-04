@@ -2,10 +2,7 @@ package graph_editor.properties;
 
 import graph_editor.graph.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 public class PropertySupportingGraphImpl implements PropertySupportingGraph, Serializable {
@@ -69,17 +66,23 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
         edgeTag,
         extendedTag
     }
-    //TODO consider implementing serializable in Vertex, Edge
-    void writeObject(ObjectOutputStream oos) throws IOException {
+
+    @Serial
+    private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
+        System.out.println("proper saving");
         oos.writeObject(properGraph);
+        System.out.println("proper saved");
         oos.writeInt(extendedGraphElements.size());
         for (var entry : extendedGraphElements.entrySet()) {
             oos.writeInt(entry.getKey());
             oos.writeObject(entry.getValue());
         }
+        System.out.println("extended saved");
         oos.writeInt(properties.values().size());
+        System.out.println("saving properties");
         for (GraphProperty property : properties.values()) {
+            System.out.println("property: " + property.getName());
             oos.writeObject(property.getName());
             var entries = property.getEntriesWithProperty();
             oos.writeInt(entries.size());
@@ -102,8 +105,9 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
             }
         }
     }
-    //TODO consider implementing serializable in Vertex, Edge
-    void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+
+    @Serial
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         long serialUID = ois.readLong();
         if (serialUID != serialVersionUID) {
             throw new IOException("Incorrect serialization version: " + serialUID + ", expected " + serialVersionUID);
