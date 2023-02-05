@@ -9,8 +9,8 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
     private static final long serialVersionUID = 3L;
     private Graph properGraph;
     private Map<String, GraphProperty> properties;
-    private final Map<Integer, ExtendedGraphElement> extendedGraphElements = new HashMap<>();
-    private final Map<ExtendedGraphElement, Integer> inverseMap = new HashMap<>();
+    private Map<Integer, ExtendedGraphElement> extendedGraphElements = new HashMap<>();
+    private Map<ExtendedGraphElement, Integer> inverseMap = new HashMap<>();
     private int extendedId = 0;
 
     PropertySupportingGraphImpl(Graph properGraph, Map<String, GraphProperty> properties, Iterable<ExtendedGraphElement> extendedGraphElements) {
@@ -108,6 +108,9 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
 
     @Serial
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        extendedGraphElements = new HashMap<>();
+        inverseMap = new HashMap<>();
+
         long serialUID = ois.readLong();
         if (serialUID != serialVersionUID) {
             throw new IOException("Incorrect serialization version: " + serialUID + ", expected " + serialVersionUID);
