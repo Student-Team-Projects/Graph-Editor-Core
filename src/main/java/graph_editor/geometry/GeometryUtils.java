@@ -1,5 +1,9 @@
 package graph_editor.geometry;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Optional;
+
 import static java.lang.Math.PI;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -76,5 +80,10 @@ public class GeometryUtils {
         if (a<1) return -1;
         if (a==1) return 0;
         return 1+log2int(a/2);
+    }
+
+    public static Point findClosestPoint(Point reference, Collection<Point> candidates) {
+        Optional<Point> closest = candidates.stream().min(Comparator.comparingDouble(p -> distance(reference, p)));
+        return closest.orElse(null);
     }
 }

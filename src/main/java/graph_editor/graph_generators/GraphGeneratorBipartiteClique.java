@@ -42,7 +42,7 @@ public class GraphGeneratorBipartiteClique implements GraphGenerator {
         return visualizer.generateVisual(graph);
     }
 
-    public static Point getPointBipartite(int index, int left, int right) {
+    private Point getPointBipartite(int index, int left, int right) {
         int spaces = Math.max(right, left) - 1;
         double dist = spaces == 0 ? 1.0 : 1.0/spaces;
 
