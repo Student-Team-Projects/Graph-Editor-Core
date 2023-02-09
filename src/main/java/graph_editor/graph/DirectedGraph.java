@@ -3,7 +3,7 @@ package graph_editor.graph;
 import java.util.*;
 import java.io.*;
 
-class DirectedGraph implements Graph, Serializable {
+public class DirectedGraph implements Graph, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private List<Edge> edges;

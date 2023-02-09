@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class UndirectedGraph implements Graph, Serializable {
+public class UndirectedGraph implements Graph, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private List<Edge> edges;
