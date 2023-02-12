@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,12 +29,33 @@ class UndirectedGraphBuilderTest {
         builder.addEdge(0, 1);
 
         Graph graph = builder.build();
+
         List<Vertex> vertices = graph.getVertices();
         assertEquals(2, vertices.size());
-        assertEquals(2, graph.getEdges().size());
+        assertEquals(1, graph.getEdges().size());
         Vertex v0 = vertices.get(0);
         Vertex v1 = vertices.get(1);
         assertIterableEquals(singletonList(v1), v0.getAdjacent());
-        assertIterableEquals(singletonList(v0), v1.getAdjacent());
+        assertIterableEquals(emptyList(), v1.getAdjacent());
+    }
+
+    @Test
+    void shouldNotDuplicateEdge() {
+        UndirectedGraph.UndirectedGraphBuilder builder = new UndirectedGraph.UndirectedGraphBuilder();
+        builder.addVertex();
+        builder.addVertex();
+        builder.addEdge(0, 1);
+        builder.addEdge(1, 0);
+        builder.addEdge(0, 1);
+
+        Graph graph = builder.build();
+
+        List<Vertex> vertices = graph.getVertices();
+        assertEquals(2, vertices.size());
+        assertEquals(1, graph.getEdges().size());
+        Vertex v0 = vertices.get(0);
+        Vertex v1 = vertices.get(1);
+        assertIterableEquals(singletonList(v1), v0.getAdjacent());
+        assertIterableEquals(emptyList(), v1.getAdjacent());
     }
 }

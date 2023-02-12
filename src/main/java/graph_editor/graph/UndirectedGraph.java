@@ -70,14 +70,18 @@ public class UndirectedGraph implements Graph, Serializable {
 
         @Override
         public void addEdge(int sourceIndex, int targetIndex) {
-            addDirectedEdge(sourceIndex, targetIndex);
-            addDirectedEdge(targetIndex, sourceIndex);
-        }
-
-        private void addDirectedEdge(int sourceIndex, int targetIndex) {
-            Edge edge = new EdgeImpl(vertices.get(sourceIndex), vertices.get(targetIndex));
-            vertices.get(sourceIndex).getEdges().add(edge);
-            edges.add(edge);
+            if (sourceIndex >= vertices.size() || targetIndex >= vertices.size()) {
+                throw new IllegalArgumentException("Invalid source or target index");
+            }
+            Vertex source = vertices.get(sourceIndex);
+            Vertex target = vertices.get(targetIndex);
+            Edge edge = new EdgeImpl(source, target);
+            Edge reverseEdge = new EdgeImpl(target, source);
+            if (!source.getEdges().contains(edge) && !target.getEdges().contains(reverseEdge)) {
+                vertices.get(sourceIndex).getEdges().add(edge);
+                edges.add(edge);
+                System.out.println(edges.size());
+            }
         }
 
         @Override

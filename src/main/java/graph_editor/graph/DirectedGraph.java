@@ -64,9 +64,15 @@ public class DirectedGraph implements Graph, Serializable {
 
         @Override
         public void addEdge(int sourceIndex, int targetIndex) {
-            Edge edge = new EdgeImpl(vertices.get(sourceIndex), vertices.get(targetIndex));
-            vertices.get(sourceIndex).getEdges().add(edge);
-            edges.add(edge);
+            if (sourceIndex >= vertices.size() || targetIndex >= vertices.size()) {
+                throw new IllegalArgumentException("Invalid source or target index");
+            }
+            Vertex source = vertices.get(sourceIndex);
+            Edge edge = new EdgeImpl(source, vertices.get(targetIndex));
+            if (!source.getEdges().contains(edge)) {
+                source.getEdges().add(edge);
+                edges.add(edge);
+            }
         }
 
         @Override
