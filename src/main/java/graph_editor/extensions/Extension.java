@@ -2,14 +2,14 @@ package graph_editor.extensions;
 
 public class Extension {
     private final String name;
-    private final ExtensionInvoker invoker;
-    private final ExtensionInvoker.ExtensionProxy extensionProxy;
+    private final Plugin plugin;
+    private final Plugin.Proxy proxy;
     private boolean enabled = false;
 
-    public Extension(String name, ExtensionInvoker invoker, ExtensionInvoker.ExtensionProxy extensionProxy) {
+    public Extension(String name, Plugin plugin, Plugin.Proxy proxy) {
         this.name = name;
-        this.invoker = invoker;
-        this.extensionProxy = extensionProxy;
+        this.plugin = plugin;
+        this.proxy = proxy;
     }
 
     public boolean isEnabled() {
@@ -18,7 +18,11 @@ public class Extension {
     public void setEnabled(boolean value) {
         if (enabled == value) return;
         enabled = value;
-        invoker.callFunction(enabled ? "activate" : "deactivate", extensionProxy);
+        if (enabled) {
+            plugin.activate(proxy);
+        } else {
+            plugin.deactivate(proxy);
+        }
     }
     public String getName() { return name; }
 }
