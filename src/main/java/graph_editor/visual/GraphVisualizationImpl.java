@@ -1,14 +1,15 @@
 package graph_editor.visual;
 
 import graph_editor.graph.*;
+
+import java.io.*;
 import java.util.*;
 
 import graph_editor.geometry.Point;
 
 // Only mutable in this package.
-class GraphVisualizationImpl implements GraphVisualization {
-
-    GraphVisualizationImpl(Graph graph) {
+class GraphVisualizationImpl<T extends Graph> implements GraphVisualization<T>, Serializable {
+    GraphVisualizationImpl(T graph) {
         vertex_coord = new HashMap<Vertex, Point>();
         this.graph = graph;
     }
@@ -23,7 +24,7 @@ class GraphVisualizationImpl implements GraphVisualization {
     }
 
     @Override
-    public Graph getGraph() {
+    public T getGraph() {
         return graph;
     }
 
@@ -33,5 +34,36 @@ class GraphVisualizationImpl implements GraphVisualization {
     }
 
     private Map<Vertex, Point> vertex_coord; 
-    private Graph graph;
+    private T graph;
+
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeLong(serialVersionUID);
+        oos.writeObject(graph);
+
+        Set<Map.Entry<Vertex, Point>> entries = vertex_coord.entrySet();
+        oos.writeInt(entries.size());
+        for (Map.Entry<Vertex, Point> entry : entries) {
+            oos.writeInt(entry.getKey().getIndex());
+            Point p = entry.getValue();
+            oos.writeDouble(p.getX());
+            oos.writeDouble(p.getY());
+        }
+    }
+
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        long serialUID = ois.readLong();
+        if (serialUID != serialVersionUID) {
+            throw new IOException("Incorrect serialization version: " + serialUID + ", expected " + serialVersionUID);
+        }
+        graph = (T) ois.readObject();
+        int size = ois.readInt();
+        vertex_coord = new HashMap<>();
+        List<Vertex> vertices = graph.getVertices();
+        for (int  i = 0; i < size; i++) {
+            int index = ois.readInt();
+            Point p = new Point(ois.readDouble(), ois.readDouble());
+            vertex_coord.put(vertices.get(index), p);
+        }
+    }
+    private static final long serialVersionUID = 2L;
 }

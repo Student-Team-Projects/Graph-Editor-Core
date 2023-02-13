@@ -23,7 +23,7 @@ class GraphImpl implements Graph, Serializable {
 
     @Override
     public List<Vertex> getVertices() {
-        return vertices;
+        return Collections.unmodifiableList(vertices);
     }
 
     @Override
@@ -61,7 +61,8 @@ class GraphImpl implements Graph, Serializable {
         return builder.toString();
     }
 
-    void writeObject(ObjectOutputStream oos) throws IOException {
+    @Serial
+    private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
         oos.writeInt(vertices.size());
         oos.writeInt(edges.size());
@@ -71,14 +72,15 @@ class GraphImpl implements Graph, Serializable {
         }
     }
 
-    void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+    @Serial
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         long serialUID = ois.readLong();
         if (serialUID != serialVersionUID) {
             throw new IOException("This is an older serialization version.");
         }
 
         int num_vertices = ois.readInt();
-        GraphBuilder builder = new GraphBuilder(num_vertices);
+        GraphBuilderImpl builder = new GraphBuilderImpl(num_vertices);
         int num_edges = ois.readInt();
         for (int i = 0; i < num_edges; i++) {
             builder.addEdge(ois.readInt(), ois.readInt());
