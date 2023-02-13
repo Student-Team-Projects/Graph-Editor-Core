@@ -8,7 +8,7 @@ apply plugin : "java"
 group 'com.example'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 17
+sourceCompatibility = 8
 
 repositories {
     mavenCentral()
@@ -23,7 +23,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.example'
             artifactId = 'graph_editor_core'
-            version = "1.0.0"
+            version = "1.0.1"
             from components.java
         }
     }

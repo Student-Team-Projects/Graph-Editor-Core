@@ -37,10 +37,10 @@ class VertexImpl implements Vertex {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Vertex v) {
-            return v.getIndex() == getIndex();
+        if (!(o instanceof Vertex)) {
+            return false;
         }
-        return false;
+        return ((Vertex)o).getIndex() == getIndex();
     }
 
     @Override
