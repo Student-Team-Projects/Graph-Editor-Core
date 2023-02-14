@@ -24,7 +24,7 @@ public class PropertyGraphBuilder<G extends Graph> {
 
     public void addExtendedElement(ExtendedGraphElement element) { extendedGraphElements.add(element); }
 
-    public void setElementProperty(GraphElement element, String propertyName, String value) {
+    public void addElementProperty(GraphElement element, String propertyName, String value) {
         if (!properties.containsKey(propertyName)) {
             registerProperty(propertyName);
         }
