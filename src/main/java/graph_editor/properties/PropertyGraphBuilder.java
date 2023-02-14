@@ -9,12 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PropertyGraphBuilder<G extends Graph> {
+public class PropertyGraphBuilder {
     private final Map<String, GraphProperty> properties = new HashMap<>();
     private final List<ExtendedGraphElement> extendedGraphElements = new ArrayList<>();
-    private final G graph;
+    private final Graph graph;
 
-    public PropertyGraphBuilder(G properGraph) {
+    public PropertyGraphBuilder(Graph properGraph) {
         this.graph = properGraph;
     }
 
