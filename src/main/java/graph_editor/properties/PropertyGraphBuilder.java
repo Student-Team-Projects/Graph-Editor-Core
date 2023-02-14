@@ -32,6 +32,6 @@ public class PropertyGraphBuilder {
     }
 
     public PropertySupportingGraph build() {
-        return new PropertySupportingGraphImpl<>(graph, properties, extendedGraphElements);
+        return new PropertySupportingGraphImpl(graph, properties, extendedGraphElements);
     }
 }
