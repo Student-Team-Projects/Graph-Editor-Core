@@ -49,9 +49,9 @@ public abstract class AbstractGraphDrawer implements GraphDrawer {
 
     protected final double CIRCLE_RADIUS = 20;
 
-    abstract void moveCursorTo(Point p);
-    abstract void drawLineTo(Point p);
-    abstract void drawCircle(Point p);
+    protected abstract void moveCursorTo(Point p);
+    protected abstract void drawLineTo(Point p);
+    protected abstract void drawCircle(Point p);
 
     private Graph graph;
     private GraphVisualization visualization;

@@ -1,13 +1,16 @@
 package graph_editor.extensions;
 
 import graph_editor.draw.GraphDrawer;
+import graph_editor.properties.PropertyUser;
 
-public interface Plugin {
+public interface Plugin extends PropertyUser {
     interface Proxy {
         boolean registerOption(Plugin plugin, String name, OnOptionSelection onOptionSelection);
         boolean deregisterOption(Plugin plugin, String name);
-        boolean acquireDrawingBehaviour(Plugin plugin, GraphDrawer drawer);
-        void releaseDrawingBehaviour(Plugin plugin);
+
+        boolean registerPropertyOption(Plugin plugin, String name, OnPropertyManagerSelection onPropertyManagerSelection);
+        boolean deregisterPropertyOption(Plugin plugin, String name);
+
         void releasePluginResources(Plugin plugin);
     }
 
