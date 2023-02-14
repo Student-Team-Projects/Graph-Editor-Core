@@ -10,7 +10,7 @@ import static java.util.Collections.singletonList;
 class DirectedGraphBuilderTest {
     @Test
     void shouldIncrementVertexIndex() {
-        DirectedGraph.DirectedGraphBuilder builder = new DirectedGraph.DirectedGraphBuilder();
+        DirectedGraph.Builder builder = new DirectedGraph.Builder();
         Vertex v0 = builder.addVertex();
         Vertex v1 = builder.addVertex();
         Vertex v2 = builder.addVertex();
@@ -22,7 +22,7 @@ class DirectedGraphBuilderTest {
 
     @Test
     void shouldAddDirectedEdge() {
-        DirectedGraph.DirectedGraphBuilder builder = new DirectedGraph.DirectedGraphBuilder();
+        DirectedGraph.Builder builder = new DirectedGraph.Builder();
         builder.addVertex();
         builder.addVertex();
         builder.addEdge(0, 1);
@@ -39,7 +39,7 @@ class DirectedGraphBuilderTest {
 
     @Test
     void shouldNotDuplicateEdge() {
-        DirectedGraph.DirectedGraphBuilder builder = new DirectedGraph.DirectedGraphBuilder();
+        DirectedGraph.Builder builder = new DirectedGraph.Builder();
         builder.addVertex();
         builder.addVertex();
         builder.addEdge(0, 1);

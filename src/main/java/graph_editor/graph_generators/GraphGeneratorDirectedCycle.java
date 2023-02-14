@@ -18,7 +18,7 @@ public class GraphGeneratorDirectedCycle implements GraphGenerator<DirectedGraph
     @Override
     public GraphVisualization<DirectedGraph> generate(List<Integer> parameters) {
         int cycleSize = parameters.get(0);
-        DirectedGraph.DirectedGraphBuilder builder = new DirectedGraph.DirectedGraphBuilder(cycleSize);
+        DirectedGraph.Builder builder = new DirectedGraph.Builder(cycleSize);
 
         for (int i = 0; i < cycleSize; i++) {
             builder.addEdge(i, (i + 1)%cycleSize);

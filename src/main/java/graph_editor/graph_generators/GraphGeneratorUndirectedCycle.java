@@ -18,7 +18,7 @@ public class GraphGeneratorUndirectedCycle implements GraphGenerator<UndirectedG
     @Override
     public GraphVisualization<UndirectedGraph> generate(List<Integer> parameters) {
         int cycleSize = parameters.get(0);
-        UndirectedGraph.UndirectedGraphBuilder builder = new UndirectedGraph.UndirectedGraphBuilder(cycleSize);
+        UndirectedGraph.Builder builder = new UndirectedGraph.Builder(cycleSize);
 
         for (int i = 0; i < cycleSize; i++) {
             builder.addEdge(i, (i + 1)%cycleSize);

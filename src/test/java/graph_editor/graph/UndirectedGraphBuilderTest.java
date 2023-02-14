@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UndirectedGraphBuilderTest {
     @Test
     void shouldIncrementVertexIndex() {
-        UndirectedGraph.UndirectedGraphBuilder builder = new UndirectedGraph.UndirectedGraphBuilder();
+        UndirectedGraph.Builder builder = new UndirectedGraph.Builder();
         Vertex v0 = builder.addVertex();
         Vertex v1 = builder.addVertex();
         Vertex v2 = builder.addVertex();
@@ -23,7 +23,7 @@ class UndirectedGraphBuilderTest {
 
     @Test
     void shouldAddUndirectedEdge() {
-        UndirectedGraph.UndirectedGraphBuilder builder = new UndirectedGraph.UndirectedGraphBuilder();
+        UndirectedGraph.Builder builder = new UndirectedGraph.Builder();
         builder.addVertex();
         builder.addVertex();
         builder.addEdge(0, 1);
@@ -41,7 +41,7 @@ class UndirectedGraphBuilderTest {
 
     @Test
     void shouldNotDuplicateEdge() {
-        UndirectedGraph.UndirectedGraphBuilder builder = new UndirectedGraph.UndirectedGraphBuilder();
+        UndirectedGraph.Builder builder = new UndirectedGraph.Builder();
         builder.addVertex();
         builder.addVertex();
         builder.addEdge(0, 1);

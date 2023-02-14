@@ -40,14 +40,14 @@ public class DirectedGraph implements Graph, Serializable {
         return builder.toString();
     }
 
-    public static class DirectedGraphBuilder implements GenericGraphBuilder<DirectedGraph> {
+    public static class Builder implements GenericGraphBuilder<DirectedGraph> {
         private final List<Edge> edges = new ArrayList<>();
         private final List<VertexImpl> vertices = new ArrayList<>();
         private int currentIndex = 0;
 
-        public DirectedGraphBuilder() {}
+        public Builder() {}
 
-        public DirectedGraphBuilder(int vertexCount) {
+        public Builder(int vertexCount) {
             while(vertexCount > 0) {
                 addVertex();
                 vertexCount--;
@@ -100,7 +100,7 @@ public class DirectedGraph implements Graph, Serializable {
         }
 
         int vertexCount = ois.readInt();
-        DirectedGraphBuilder builder = new DirectedGraphBuilder(vertexCount);
+        Builder builder = new Builder(vertexCount);
         int num_edges = ois.readInt();
         for (int i = 0; i < num_edges; i++) {
             builder.addEdge(ois.readInt(), ois.readInt());

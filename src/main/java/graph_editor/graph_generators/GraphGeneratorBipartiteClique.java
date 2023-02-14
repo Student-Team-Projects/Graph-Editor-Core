@@ -23,7 +23,7 @@ public class GraphGeneratorBipartiteClique implements GraphGenerator<UndirectedG
         int right = parameters.get(1);
         int verticesNumber = left + right;
 
-        UndirectedGraph.UndirectedGraphBuilder builder = new UndirectedGraph.UndirectedGraphBuilder(verticesNumber);
+        UndirectedGraph.Builder builder = new UndirectedGraph.Builder(verticesNumber);
 
         for (int i = 0; i < left; i++) {
             for (int j = left; j < verticesNumber; j++) {

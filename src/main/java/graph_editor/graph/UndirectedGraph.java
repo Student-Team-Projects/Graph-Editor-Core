@@ -46,14 +46,14 @@ public class UndirectedGraph implements Graph, Serializable {
         return builder.toString();
     }
 
-    public static class UndirectedGraphBuilder implements GenericGraphBuilder<UndirectedGraph> {
+    public static class Builder implements GenericGraphBuilder<UndirectedGraph> {
         private final List<Edge> edges = new ArrayList<>();
         private final List<VertexImpl> vertices = new ArrayList<>();
         private int currentIndex = 0;
 
-        public UndirectedGraphBuilder() {}
+        public Builder() {}
 
-        public UndirectedGraphBuilder(int vertexCount) {
+        public Builder(int vertexCount) {
             while(vertexCount > 0) {
                 addVertex();
                 vertexCount--;
@@ -113,7 +113,7 @@ public class UndirectedGraph implements Graph, Serializable {
         }
 
         int vertexCount = ois.readInt();
-        UndirectedGraphBuilder builder = new UndirectedGraphBuilder(vertexCount);
+        Builder builder = new Builder(vertexCount);
         int num_edges = ois.readInt();
         for (int i = 0; i < num_edges; i++) {
             int sourceIndex = ois.readInt();
