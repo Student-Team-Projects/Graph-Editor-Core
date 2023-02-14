@@ -18,6 +18,11 @@ class EdgeImpl implements Edge {
     }
 
     @Override
+    public Vertex getOther(Vertex vertex) {
+        return vertex == source? target : source;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Edge)) {
             return false;
@@ -27,6 +32,6 @@ class EdgeImpl implements Edge {
             getTarget().equals(other.getTarget());
     }
 
-    private Vertex source;
-    private Vertex target;
+    private final Vertex source;
+    private final Vertex target;
 }
