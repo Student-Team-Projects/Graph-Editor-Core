@@ -1,16 +1,14 @@
 package graph_editor.graph_generators;
 
 import graph_editor.geometry.Point;
-import graph_editor.graph.Graph;
-import graph_editor.graph.GraphBuilder;
-import graph_editor.graph.SimpleGraphBuilder;
+import graph_editor.graph.UndirectedGraph;
 import graph_editor.visual.BuilderVisualizer;
 import graph_editor.visual.GraphVisualization;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphGeneratorBipartiteClique implements GraphGenerator {
+public class GraphGeneratorBipartiteClique implements GraphGenerator<UndirectedGraph> {
     @Override
     public List<Parameter> getParameters() {
         List<Parameter> parameters = new ArrayList<>();
@@ -20,19 +18,19 @@ public class GraphGeneratorBipartiteClique implements GraphGenerator {
     }
 
     @Override
-    public GraphVisualization<Graph> generate(List<Integer> parameters) {
+    public GraphVisualization<UndirectedGraph> generate(List<Integer> parameters) {
         int left = parameters.get(0);
         int right = parameters.get(1);
         int verticesNumber = left + right;
 
-        GraphBuilder builder = new SimpleGraphBuilder(verticesNumber);
+        UndirectedGraph.UndirectedGraphBuilder builder = new UndirectedGraph.UndirectedGraphBuilder(verticesNumber);
 
         for (int i = 0; i < left; i++) {
             for (int j = left; j < verticesNumber; j++) {
                 builder.addEdge(i, j);
             }
         }
-        Graph graph = builder.build();
+        UndirectedGraph graph = builder.build();
 
         BuilderVisualizer visualizer = new BuilderVisualizer();
         for (int i = 0; i < verticesNumber; i++) {

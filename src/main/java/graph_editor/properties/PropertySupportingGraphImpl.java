@@ -5,15 +5,15 @@ import graph_editor.graph.*;
 import java.io.*;
 import java.util.*;
 
-public class PropertySupportingGraphImpl implements PropertySupportingGraph, Serializable {
+public class PropertySupportingGraphImpl<G extends Graph> implements PropertySupportingGraph, Serializable {
     private static final long serialVersionUID = 3L;
-    private Graph properGraph;
+    private G properGraph;
     private Map<String, GraphProperty> properties;
     private Map<Integer, ExtendedGraphElement> extendedGraphElements = new HashMap<>();
     private Map<ExtendedGraphElement, Integer> inverseMap = new HashMap<>();
     private int extendedId = 0;
 
-    PropertySupportingGraphImpl(Graph properGraph, Map<String, GraphProperty> properties, Iterable<ExtendedGraphElement> extendedGraphElements) {
+    PropertySupportingGraphImpl(G properGraph, Map<String, GraphProperty> properties, Iterable<ExtendedGraphElement> extendedGraphElements) {
         this.properGraph = properGraph;
         this.properties = properties;
         extendedGraphElements.forEach(element -> {
@@ -115,7 +115,7 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
         if (serialUID != serialVersionUID) {
             throw new IOException("Incorrect serialization version: " + serialUID + ", expected " + serialVersionUID);
         }
-        properGraph = (Graph) ois.readObject();
+        properGraph = (G) ois.readObject();
         int extendedElementsNumber = ois.readInt();
         for (int i = 0; i < extendedElementsNumber; i++) {
             int elementId = ois.readInt();
