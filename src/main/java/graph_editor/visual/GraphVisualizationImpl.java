@@ -36,14 +36,13 @@ class GraphVisualizationImpl<T extends Graph> implements GraphVisualization<T>, 
     private Map<Vertex, Point> vertex_coord; 
     private T graph;
 
-    @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
         oos.writeObject(graph);
 
-        var entries = vertex_coord.entrySet();
+        Set<Map.Entry<Vertex, Point>> entries = vertex_coord.entrySet();
         oos.writeInt(entries.size());
-        for (var entry : entries) {
+        for (Map.Entry<Vertex, Point> entry : entries) {
             oos.writeInt(entry.getKey().getIndex());
             Point p = entry.getValue();
             oos.writeDouble(p.getX());
@@ -51,7 +50,6 @@ class GraphVisualizationImpl<T extends Graph> implements GraphVisualization<T>, 
         }
     }
 
-    @Serial
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         long serialUID = ois.readLong();
         if (serialUID != serialVersionUID) {
@@ -60,7 +58,7 @@ class GraphVisualizationImpl<T extends Graph> implements GraphVisualization<T>, 
         graph = (T) ois.readObject();
         int size = ois.readInt();
         vertex_coord = new HashMap<>();
-        var vertices = graph.getVertices();
+        List<Vertex> vertices = graph.getVertices();
         for (int  i = 0; i < size; i++) {
             int index = ois.readInt();
             Point p = new Point(ois.readDouble(), ois.readDouble());

@@ -67,14 +67,13 @@ public class PropertySupportingGraphImpl<G extends Graph> implements PropertySup
         extendedTag
     }
 
-    @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
         System.out.println("proper saving");
         oos.writeObject(properGraph);
         System.out.println("proper saved");
         oos.writeInt(extendedGraphElements.size());
-        for (var entry : extendedGraphElements.entrySet()) {
+        for (Map.Entry<Integer, ExtendedGraphElement> entry : extendedGraphElements.entrySet()) {
             oos.writeInt(entry.getKey());
             oos.writeObject(entry.getValue());
         }
@@ -84,17 +83,17 @@ public class PropertySupportingGraphImpl<G extends Graph> implements PropertySup
         for (GraphProperty property : properties.values()) {
             System.out.println("property: " + property.getName());
             oos.writeObject(property.getName());
-            var entries = property.getEntriesWithProperty();
+            Set<Map.Entry<GraphElement, String>> entries = property.getEntriesWithProperty();
             oos.writeInt(entries.size());
-            for (var entry : entries) {
+            for (Map.Entry<GraphElement, String> entry : entries) {
                 GraphElement element = entry.getKey();
-                if (element instanceof Vertex v) {
+                if (element instanceof Vertex) {
                     oos.writeObject(Tag.vertexTag);
-                    oos.writeInt(v.getIndex());
-                } else if (element instanceof Edge e) {
+                    oos.writeInt(((Vertex)element).getIndex());
+                } else if (element instanceof Edge) {
                     oos.writeObject(Tag.edgeTag);
-                    oos.writeInt(e.getSource().getIndex());
-                    oos.writeInt(e.getTarget().getIndex());
+                    oos.writeInt(((Edge)element).getSource().getIndex());
+                    oos.writeInt(((Edge)element).getTarget().getIndex());
                 } else if (element instanceof ExtendedGraphElement) {
                     oos.writeObject(Tag.extendedTag);
                     oos.writeInt(inverseMap.get(element));
@@ -106,7 +105,6 @@ public class PropertySupportingGraphImpl<G extends Graph> implements PropertySup
         }
     }
 
-    @Serial
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         extendedGraphElements = new HashMap<>();
         inverseMap = new HashMap<>();
@@ -119,7 +117,7 @@ public class PropertySupportingGraphImpl<G extends Graph> implements PropertySup
         int extendedElementsNumber = ois.readInt();
         for (int i = 0; i < extendedElementsNumber; i++) {
             int elementId = ois.readInt();
-            var element = (ExtendedGraphElement) ois.readObject();
+            ExtendedGraphElement element = (ExtendedGraphElement) ois.readObject();
             extendedGraphElements.put(elementId, element);
             inverseMap.put(element, elementId);
             if (extendedId <= elementId) { extendedId = elementId + 1; }

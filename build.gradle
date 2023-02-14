@@ -1,13 +1,14 @@
 plugins {
-    id 'java'
+    id 'java-library'
+    id 'maven-publish'
 }
 
 apply plugin : "java" 
 
-group 'io'
-version '1'
+group 'com.example'
+version '1.0-SNAPSHOT'
 
-sourceCompatibility = 17
+sourceCompatibility = 8
 
 repositories {
     mavenCentral()
@@ -15,6 +16,20 @@ repositories {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.example'
+            artifactId = 'graph_editor_core'
+            version = "1.0.4"
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
 }
 
 dependencies {

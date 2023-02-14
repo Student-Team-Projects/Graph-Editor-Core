@@ -6,9 +6,9 @@ import graph_editor.geometry.*;
 
 import java.util.*;
 
-public abstract class AbstractGraphDrawer implements GraphDrawer {
+public abstract class AbstractGraphDrawer<T extends Graph> implements GraphDrawer<T> {
     @Override
-    public void drawGraph(GraphVisualization visual) {
+    public void drawGraph(GraphVisualization<T> visual) {
         this.visualization = visual;
         this.graph = visual.getGraph();
         visited_nodes = new HashSet<Vertex>();
@@ -17,7 +17,7 @@ public abstract class AbstractGraphDrawer implements GraphDrawer {
     }
 
     @Override
-    public List<Geometry> getPrimitiveGrometries(GraphVisualization visual) {
+    public List<Geometry> getPrimitiveGrometries(GraphVisualization<T> visual) {
         List<Geometry> geometries = new ArrayList<>();
         for (Vertex vertex : visual.getGraph().getVertices()) {
             geometries.add(new Circle(visual.getVertexPoint(vertex), CIRCLE_RADIUS));
@@ -49,11 +49,11 @@ public abstract class AbstractGraphDrawer implements GraphDrawer {
 
     protected final double CIRCLE_RADIUS = 20;
 
-    abstract void moveCursorTo(Point p);
-    abstract void drawLineTo(Point p);
-    abstract void drawCircle(Point p);
+    protected abstract void moveCursorTo(Point p);
+    protected abstract void drawLineTo(Point p);
+    protected abstract void drawCircle(Point p);
 
     private Graph graph;
-    private GraphVisualization visualization;
+    private GraphVisualization<T> visualization;
     private Set<Vertex> visited_nodes;
 }
