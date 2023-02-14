@@ -1,5 +1,6 @@
 package graph_editor.graph_generators;
 
+import graph_editor.geometry.GeometryUtils;
 import graph_editor.graph.DirectedGraph;
 import graph_editor.visual.BuilderVisualizer;
 import graph_editor.visual.GraphVisualization;
@@ -28,7 +29,7 @@ public class GraphGeneratorDirectedCycle implements GraphGenerator<DirectedGraph
         BuilderVisualizer visualizer = new BuilderVisualizer();
         for (int i = 0; i < cycleSize; i++) {
             visualizer.addCoordinates(graph.getVertices().get(i),
-                    GeometryHelper.getPointOnCycle(i, cycleSize));
+                    GeometryUtils.getPointOnCircle(i, cycleSize));
         }
 
         return visualizer.generateVisual(graph);
