@@ -14,7 +14,7 @@
 
 extern "C"
 JNIEXPORT jdoubleArray JNICALL
-Java_com_example_graph_1editor_model_DrawManager_arrangeGraph(__unused JNIEnv *env, jclass clazz,
+Java_com_example_graph_1editor_model_DrawManager_arrangeGraph(JNIEnv *env, jobject clazz,
                                                               jint n,
                                                               jint m,
                                                               jdoubleArray tab_x,
@@ -94,7 +94,7 @@ Java_com_example_graph_1editor_model_DrawManager_arrangeGraph(__unused JNIEnv *e
 // SECOND FUNCTION
 extern "C"
 JNIEXPORT jdoubleArray JNICALL
-Java_com_example_graph_1editor_model_DrawManager_arrangePlanarGraph(__unused JNIEnv *env, jclass clazz,
+Java_com_example_graph_1editor_model_DrawManager_arrangePlanarGraph( JNIEnv *env, jobject clazz,
                                                               jint n,
                                                               jint m,
                                                               jdoubleArray tab_x,
@@ -190,7 +190,7 @@ Java_com_example_graph_1editor_model_DrawManager_arrangePlanarGraph(__unused JNI
 
 extern "C"
 JNIEXPORT jdoubleArray JNICALL
-Java_com_example_graph_1editor_model_DrawManager_makePlanar(__unused JNIEnv *env, jclass clazz,
+Java_com_example_graph_1editor_model_DrawManager_makePlanar( JNIEnv *env, jobject clazz,
                                                                     jint n,
                                                                     jint m,
                                                                     jdoubleArray tab_x,

@@ -53,9 +53,9 @@ tasks.withType(Test) {
 publishing {
   publications {
     jni(MavenPublication) {
-      groupId = 'com.example'
-      artifactId = 'jni-libe'
-      version = "1.0.6"
+      groupId = 'java'
+      artifactId = 'jni-lib'
+      version = "unspecified"
       from components.java
     }
   }
