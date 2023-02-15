@@ -1,5 +1,5 @@
 package graph_editor.properties;
 
-public interface PropertyUser {
+public interface PropertyWriter {
     Iterable<String> usedPropertiesNames();
 }
