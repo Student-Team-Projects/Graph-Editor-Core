@@ -1,40 +1,53 @@
 plugins {
+    id 'java'
+    id 'application'
     id 'java-library'
     id 'maven-publish'
 }
 
-apply plugin : "java" 
-
-group 'com.example'
-version '1.0-SNAPSHOT'
-
-sourceCompatibility = 8
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    implementation project(':jni-lib')
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.+'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.+'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.+'
+}
+
+application {
+    mainClassName = 'jni.app'
 }
 
 test {
     useJUnitPlatform()
 }
 
+apply plugin : "java"
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 8
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = 'com.example'
             artifactId = 'graph_editor_core'
-            version = "1.0.5"
+            version = "1.0.6"
             from components.java
         }
     }
     repositories {
         mavenLocal()
     }
-}
-
-dependencies {
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.+'
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.+'
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
-    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.+'
 }

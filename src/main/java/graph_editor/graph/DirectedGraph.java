@@ -4,7 +4,6 @@ import java.util.*;
 import java.io.*;
 
 public class DirectedGraph implements Graph, Serializable {
-    @Serial
     private static final long serialVersionUID = 1L;
     private List<Edge> edges;
     private List<? extends Vertex> vertices;
@@ -81,7 +80,6 @@ public class DirectedGraph implements Graph, Serializable {
         }
     }
 
-    @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
         oos.writeInt(vertices.size());
@@ -92,7 +90,6 @@ public class DirectedGraph implements Graph, Serializable {
         }
     }
 
-    @Serial
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         long serialUID = ois.readLong();
         if (serialUID != serialVersionUID) {
