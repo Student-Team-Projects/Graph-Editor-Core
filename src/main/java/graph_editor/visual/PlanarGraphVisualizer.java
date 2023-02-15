@@ -25,7 +25,7 @@ public class PlanarGraphVisualizer {
             tabEdgeTarget[j] = edge.getTarget().getIndex();
             j++;
         }
-        caseowanie się po type
+        //caseowanie się po type
         double[] new_pos = funkcja_z_cpp(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
 
         GraphVisualizationImpl<T> visualization = new GraphVisualizationImpl<>(graph);
