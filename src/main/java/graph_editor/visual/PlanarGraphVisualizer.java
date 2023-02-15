@@ -26,13 +26,13 @@ public class PlanarGraphVisualizer {
             j++;
         }
         //caseowanie się po type
-        double[] new_pos = funkcja_z_cpp(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
+        //double[] new_pos = funkcja_z_cpp(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
 
         GraphVisualizationImpl<T> visualization = new GraphVisualizationImpl<>(graph);
-        for (Vertex vertex : graph.getVertices()) {
+        /*for (Vertex vertex : graph.getVertices()) {
             visualization.setCoord(
                     vertex, new Point(new_pos[vertex.getIndex()], new_pos[vertex.getIndex() + graph.getVertices().size()]));
-        }
+        }*/
         return visualization;
     }
 }
