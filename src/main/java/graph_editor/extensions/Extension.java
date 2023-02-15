@@ -1,12 +1,12 @@
 package graph_editor.extensions;
 
-public class Extension {
+public class Extension<T> {
     private final String name;
-    private final Plugin plugin;
-    private final Plugin.Proxy proxy;
+    private final Plugin<T> plugin;
+    private final Plugin.Proxy<T> proxy;
     private boolean enabled = false;
 
-    public Extension(String name, Plugin plugin, Plugin.Proxy proxy) {
+    public Extension(String name, Plugin<T> plugin, Plugin.Proxy<T> proxy) {
         this.name = name;
         this.plugin = plugin;
         this.proxy = proxy;
