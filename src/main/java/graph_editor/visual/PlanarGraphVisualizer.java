@@ -6,7 +6,10 @@ import graph_editor.graph.Graph;
 import graph_editor.graph.Vertex;
 
 public class PlanarGraphVisualizer {
-    public <T extends Graph> GraphVisualization<T> generateVisual(T graph, GraphVisualization graphVisualization, String type) {
+    public static native double[] arrangeGraph(int size, int i, double[] tab, double[] tabY, int[] tabEdgeSource, int[] tabEdgeTarget);
+    public static native double[] arrangePlanarGraph(int size, int i, double[] tab, double[] tabY, int[] tabEdgeSource, int[] tabEdgeTarget);
+    public static native double[] makePlanar(int size, int i, double[] tab, double[] tabY, int[] tabEdgeSource, int[] tabEdgeTarget);
+    public <T extends Graph> GraphVisualization<T> generateVisual(T graph, GraphVisualization<T> graphVisualization, String type) {
         double[] tabX = new double[graph.getVertices().size()];
         double[] tabY = new double[graph.getVertices().size()];
         int[] tabEdgeSource = new int[graph.getEdges().size()];
@@ -25,8 +28,26 @@ public class PlanarGraphVisualizer {
             tabEdgeTarget[j] = edge.getTarget().getIndex();
             j++;
         }
-        //caseowanie się po type
-        double[] new_pos = funkcja_z_cpp(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
+
+        double[] new_pos;
+
+        switch (type) {
+            case "arrange": {
+                new_pos = arrangeGraph(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
+                break;
+            }
+            case "arrangePlanar": {
+                new_pos = arrangePlanarGraph(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
+                break;
+            }
+            case "planar": {
+                new_pos = makePlanar(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
+                break;
+            }
+            default: {
+                throw new RuntimeException("Algorithm unknown");
+            }
+        }
 
         GraphVisualizationImpl<T> visualization = new GraphVisualizationImpl<>(graph);
         for (Vertex vertex : graph.getVertices()) {
