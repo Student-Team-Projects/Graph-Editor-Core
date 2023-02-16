@@ -4,6 +4,6 @@ import graph_editor.graph.VersionStack;
 import graph_editor.properties.PropertySupportingGraph;
 import graph_editor.visual.GraphVisualization;
 
-public interface OnGraphOptionSelection {
+public interface StackCapture {
     void handle(VersionStack<GraphVisualization<PropertySupportingGraph>> stack);
 }

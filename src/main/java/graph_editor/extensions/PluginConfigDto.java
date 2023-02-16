@@ -4,7 +4,6 @@ public class PluginConfigDto {
     private String jarName;
     private String pluginClassName;
     private int version;
-    private boolean requiresDrawingPermission;
 
     public String getJarName() {
         return jarName;
@@ -15,5 +14,4 @@ public class PluginConfigDto {
     public int getVersion() {
         return version;
     }
-    public boolean getRequiresDrawingPermission() { return requiresDrawingPermission; }
 }
