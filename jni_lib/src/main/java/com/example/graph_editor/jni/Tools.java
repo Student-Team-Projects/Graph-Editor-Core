@@ -1,9 +1,10 @@
-package jni;
+package com.example.graph_editor.jni;
 
 public class Tools {
     static {
-        if (!LibraryLoader.load(Tools.class, "tools"))
+        if (!LibraryLoader.load(Tools.class, "tools")) {
             System.loadLibrary("tools");
+        }
     }
     public String foo() {
         return "foo";

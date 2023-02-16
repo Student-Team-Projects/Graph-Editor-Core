@@ -1,5 +1,6 @@
 package jni;
 
+import com.example.graph_editor.jni.Tools;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

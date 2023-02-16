@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(':jni-lib')
+    implementation project(':jni_lib')
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.+'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.+'
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'

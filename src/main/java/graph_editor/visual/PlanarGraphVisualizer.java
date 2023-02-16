@@ -2,10 +2,7 @@ package graph_editor.visual;
 
 import graph_editor.geometry.Point;
 import graph_editor.graph.*;
-import jni.Tools;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.graph_editor.jni.Tools;
 
 public class PlanarGraphVisualizer {
     public static native double[] arrangePlanarGraph(int size, int i, double[] tab, double[] tabY, int[] tabEdgeSource, int[] tabEdgeTarget);
@@ -29,7 +26,7 @@ public class PlanarGraphVisualizer {
             tabEdgeTarget[j] = edge.getTarget().getIndex();
             j++;
         }
-
+        System.out.println(type);
         double[] new_pos;
         Tools t = new Tools();
         switch (type) {
@@ -49,7 +46,6 @@ public class PlanarGraphVisualizer {
                 throw new RuntimeException("Algorithm unknown");
             }
         }
-
         GraphVisualizationImpl<T> visualization = new GraphVisualizationImpl<>(graph);
         for (Vertex vertex : graph.getVertices()) {
             visualization.setCoord(

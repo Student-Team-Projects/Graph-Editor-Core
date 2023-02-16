@@ -1,5 +1,5 @@
 #include <iostream>
-#include "jni_Tools.h"
+#include "com_example_graph_editor_jni_Tools.h"
 
 #include <jni.h>
 
@@ -16,7 +16,7 @@
 #include "forces.h"
 
 
-JNIEXPORT jintArray JNICALL Java_jni_Tools_dave(JNIEnv *env, jobject thisObject, jint x) {
+JNIEXPORT jintArray JNICALL Java_com_example_graph_1editor_jni_Tools_dave(JNIEnv *env, jobject thisObject, jint x) {
      jint res_tab[1];
      res_tab[0] = x * 2;
      jintArray res = env->NewIntArray(1);
@@ -26,7 +26,7 @@ JNIEXPORT jintArray JNICALL Java_jni_Tools_dave(JNIEnv *env, jobject thisObject,
 
 extern "C"
 JNIEXPORT jdoubleArray JNICALL
-Java_jni_Tools_arrange(JNIEnv *env, jobject clazz,
+Java_com_example_graph_1editor_jni_Tools_arrange(JNIEnv *env, jobject clazz,
                                                               jint n,
                                                               jint m,
                                                               jdoubleArray tab_x,
@@ -260,7 +260,7 @@ Java_com_example_graph_1editor_model_DrawManager_makePlanar( JNIEnv *env, jobjec
     return res;
 }
 
-JNIEXPORT jstring JNICALL Java_jni_Tools_bar(JNIEnv *env, jobject thisObject)
+JNIEXPORT jstring JNICALL Java_com_example_graph_1editor_jni_Tools_bar(JNIEnv *env, jobject thisObject)
 {
   std::string res("bar");
   return env->NewStringUTF(res.c_str());
