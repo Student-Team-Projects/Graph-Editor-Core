@@ -25,4 +25,17 @@ public class Extension {
         }
     }
     public String getName() { return name; }
+
+    public Iterable<Plugin.Drawer> getGraphDrawers() {
+        return plugin.getGraphDrawers();
+    }
+    public Iterable<String> usedDrawablesNames() {
+        return plugin.usedDrawablesNames();
+    }
+    public boolean supportsDirectedGraphs() {
+        return plugin.supportsDirectedGraphs();
+    }
+    public boolean supportsUndirectedGraphs() {
+        return plugin.supportsUndirectedGraphs();
+    }
 }
