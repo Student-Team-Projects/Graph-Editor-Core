@@ -17,6 +17,8 @@ class ToolsTest {
         int[] arris = {0};
         int[] arrit = {1};
         tools.arrange(2, 1, x, y, arris, arrit);
+        tools.arrangePlanar(2, 1, x, y, arris, arrit);
+        tools.makePlanar(2, 1, x, y, arris, arrit);
     }
 
 }
