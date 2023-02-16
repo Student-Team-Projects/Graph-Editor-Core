@@ -10,5 +10,12 @@ class ToolsTest {
         Tools tools = new Tools();
         assertEquals(tools.foo(), "foo");
         assertEquals(tools.bar(), "bar");
+        assertEquals(tools.dave(3)[0], 6);
+        double[] x = {0, 1};
+        double[] y = {0, 1};
+        int[] arris = {0};
+        int[] arrit = {1};
+        tools.arrange(2, 1, x, y, arris, arrit);
     }
+
 }

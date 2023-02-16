@@ -1,12 +1,13 @@
 package graph_editor.visual;
 
 import graph_editor.geometry.Point;
-import graph_editor.graph.Edge;
-import graph_editor.graph.Graph;
-import graph_editor.graph.Vertex;
+import graph_editor.graph.*;
+import jni.Tools;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlanarGraphVisualizer {
-    public static native double[] arrangeGraph(int size, int i, double[] tab, double[] tabY, int[] tabEdgeSource, int[] tabEdgeTarget);
     public static native double[] arrangePlanarGraph(int size, int i, double[] tab, double[] tabY, int[] tabEdgeSource, int[] tabEdgeTarget);
     public static native double[] makePlanar(int size, int i, double[] tab, double[] tabY, int[] tabEdgeSource, int[] tabEdgeTarget);
     public <T extends Graph> GraphVisualization<T> generateVisual(T graph, GraphVisualization<T> graphVisualization, String type) {
@@ -30,10 +31,10 @@ public class PlanarGraphVisualizer {
         }
 
         double[] new_pos;
-
+        Tools t = new Tools();
         switch (type) {
             case "arrange": {
-                new_pos = arrangeGraph(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
+                new_pos = t.arrange(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
                 break;
             }
             case "arrangePlanar": {
@@ -56,4 +57,13 @@ public class PlanarGraphVisualizer {
         }
         return visualization;
     }
+
+    public static void main(String[] args) {
+        UndirectedGraph.Builder b = new UndirectedGraph.Builder();
+        Graph g = b.build();
+        PlanarGraphVisualizer p = new PlanarGraphVisualizer();
+        Tools t = new Tools();
+        p.generateVisual(g, RandomGraphVisualizer.getVisualization(g, 10, 10), "arrange");
+    }
+
 }
