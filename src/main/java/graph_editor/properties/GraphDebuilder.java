@@ -4,14 +4,15 @@ import java.util.Collection;
 import java.util.Map;
 
 import graph_editor.geometry.Point;
-import graph_editor.graph.GraphBuilder;
+import graph_editor.graph.GenericGraphBuilder;
+import graph_editor.graph.Graph;
 import graph_editor.graph.Vertex;
 import graph_editor.visual.GraphVisualizationBuilder;
 
 public abstract class GraphDebuilder {
     public static PropertyGraphBuilder deBuild(
             PropertySupportingGraph graph,
-            GraphBuilder builder,
+            GenericGraphBuilder<? extends Graph> builder,
             GraphVisualizationBuilder visualizer,
             Collection<Map.Entry<Vertex, Point>> coordinates
     ) {

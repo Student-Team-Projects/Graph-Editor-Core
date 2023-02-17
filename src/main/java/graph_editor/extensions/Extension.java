@@ -1,6 +1,6 @@
 package graph_editor.extensions;
 
-public class Extension {
+public class Extension<T> {
     private final String name;
     private final Plugin plugin;
     private final Plugin.Proxy proxy;
