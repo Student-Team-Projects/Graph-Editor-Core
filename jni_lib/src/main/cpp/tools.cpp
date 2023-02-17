@@ -15,15 +15,6 @@
 #include "planarity.h"
 #include "forces.h"
 
-
-JNIEXPORT jintArray JNICALL Java_com_example_graph_1editor_jni_Tools_dave(JNIEnv *env, jobject thisObject, jint x) {
-     jint res_tab[1];
-     res_tab[0] = x * 2;
-     jintArray res = env->NewIntArray(1);
-     env->SetIntArrayRegion(res, (jsize)0, (jsize)1, res_tab);
-     return res;
-}
-
 extern "C"
 JNIEXPORT jdoubleArray JNICALL
 Java_com_example_graph_1editor_jni_Tools_arrange(JNIEnv *env, jobject clazz,
@@ -266,10 +257,4 @@ Java_com_example_graph_1editor_jni_Tools_makePlanar( JNIEnv *env, jobject clazz,
     }
     env->SetDoubleArrayRegion(res, (jsize)0, (jsize)n*2, res_tab);
     return res;
-}
-
-JNIEXPORT jstring JNICALL Java_com_example_graph_1editor_jni_Tools_bar(JNIEnv *env, jobject thisObject)
-{
-  std::string res("bar");
-  return env->NewStringUTF(res.c_str());
 }

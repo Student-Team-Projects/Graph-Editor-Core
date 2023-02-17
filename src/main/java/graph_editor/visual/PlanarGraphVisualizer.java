@@ -42,7 +42,10 @@ public class PlanarGraphVisualizer {
             }
             case findPlanarArrange: {
                 new_pos = t.makePlanar(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
-                // TODO: returns6969696969696969 if not planar. idk if we could import constant or not from jni
+                if (new_pos[0] == -6969696969696969.) {
+
+                }
+                // TODO: returns -6969696969696969 if not planar. idk if we can import constant or not from jni
                 break;
             }
             default: {
@@ -58,6 +61,7 @@ public class PlanarGraphVisualizer {
     }
 
     public static void main(String[] args) {
+        // TODO: remove before going in production
         double[] x = {0, 1, 2};
         double[] y = {0, 1, 2};
         int[] arris = {0, 1};
