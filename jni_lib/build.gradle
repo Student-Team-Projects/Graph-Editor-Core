@@ -25,7 +25,7 @@ task compileJNI {
   dependsOn compileJava
   doLast {
     exec {
-      commandLine 'sh', '-c', 'mkdir -p build/natives && cd build/natives && cmake ../.. && make && cp lib/libtools.so ~/.m2/'
+      commandLine 'sh', '-c', 'mkdir -p build/natives && cd build/natives && cmake ../.. && make && mkdir -p ~/.m2 && cp lib/libtools.so ~/.m2/'
     }
   }
 }
