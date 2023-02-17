@@ -1,8 +1,9 @@
 package graph_editor.properties;
 
-import graph_editor.graph.ExtendedGraphElement;
+import graph_editor.graph.Edge;
 import graph_editor.graph.Graph;
 import graph_editor.graph.GraphElement;
+import graph_editor.graph.Vertex;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +25,13 @@ public class PropertyGraphBuilder {
 
     public void addExtendedElement(ExtendedGraphElement element) { extendedGraphElements.add(element); }
 
-    public void addElementProperty(GraphElement element, String propertyName, String value) {
+    public void addElementProperty(Vertex element, String propertyName, String value) {
+        if (!properties.containsKey(propertyName)) {
+            registerProperty(propertyName);
+        }
+        properties.get(propertyName).addElementProperty(element, value);
+    }
+    public void addElementProperty(Edge element, String propertyName, String value) {
         if (!properties.containsKey(propertyName)) {
             registerProperty(propertyName);
         }
