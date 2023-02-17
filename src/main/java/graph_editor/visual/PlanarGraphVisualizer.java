@@ -6,7 +6,7 @@ import com.example.graph_editor.jni.Tools;
 
 @SuppressWarnings("unused")
 public class PlanarGraphVisualizer {
-    enum PlanarAlgorithm {
+    public enum PlanarAlgorithm {
         fixArrangingWithForces,
         fixPlanarArranging,
         findPlanarArrange,
