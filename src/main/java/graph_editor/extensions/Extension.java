@@ -1,6 +1,6 @@
 package graph_editor.extensions;
 
-public class Extension<T> {
+public class Extension {
     private final String name;
     private final Plugin plugin;
     private final Plugin.Proxy proxy;
@@ -25,4 +25,17 @@ public class Extension<T> {
         }
     }
     public String getName() { return name; }
+
+    public Iterable<Plugin.Drawer> getGraphDrawers() {
+        return plugin.getGraphDrawers();
+    }
+    public Iterable<String> usedDrawablesNames() {
+        return plugin.usedDrawablesNames();
+    }
+    public boolean supportsDirectedGraphs() {
+        return plugin.supportsDirectedGraphs();
+    }
+    public boolean supportsUndirectedGraphs() {
+        return plugin.supportsUndirectedGraphs();
+    }
 }
