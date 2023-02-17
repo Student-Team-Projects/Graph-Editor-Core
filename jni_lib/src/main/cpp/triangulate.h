@@ -59,4 +59,3 @@ std::vector<Vertex> make_graph(int n, std::vector<std::pair<int, int>> edges_inp
 void make_graph_connected(bool* visited, std::vector<Vertex> &V, std::vector<std::pair<int, int>>& toAdd);
 void mark_visited(int i, std::vector<Vertex> &V, bool* visited);
 #endif //GRAFY_TRIANGULATE_H
-Zz
