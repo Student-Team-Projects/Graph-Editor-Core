@@ -45,7 +45,7 @@ public class PlanarGraphVisualizer {
                 if (new_pos[0] == -6969696969696969.) {
 
                 }
-                // TODO: returns -6969696969696969 if not planar. idk if we can import constant or not from jni
+                // TODO: returns -6969696969696969 if not planar. idk if we can import constant or not from jni. imo great constant
                 break;
             }
             default: {

@@ -25,69 +25,84 @@ Java_com_example_graph_1editor_jni_Tools_arrange(JNIEnv *env, jobject clazz,
                                                               jintArray tab_edge_source,
                                                               jintArray tab_edge_target) {
     ld W = 1, H = 1;
-    std::vector<NamespaceForVertex::Vertex> V;
-    jint *edge_source = (*env).GetIntArrayElements(tab_edge_source, nullptr);
-    jint *edge_target = (*env).GetIntArrayElements(tab_edge_target, nullptr);
-    jdouble *x = (*env).GetDoubleArrayElements(tab_x, nullptr);
-    jdouble *y = (*env).GetDoubleArrayElements(tab_y, nullptr);
-    std::vector<std::vector<int>> E(n);
-    for (int i = 0; i < n; ++i) {
-        V.emplace_back(i);
-        V[i].setPos(x[i] / 2, y[i] / 2);
-    }
-    for (int i = 0; i < m; ++i) {
-        E[edge_source[i]].push_back(edge_target[i]);
-        E[edge_target[i]].push_back(edge_source[i]);
-    }
-
-    ld area = W * H;
-    ld k = std::sqrt(area / n);
-    ld t = W + H;
-    ld cooling = 1.1;
-    const int iterations = 200;
-    for (int i = 0; i < iterations; ++i) {
-        ld max_diff = 0;
-        forcesIteration(V, E, k, n);
-        for (auto &v : V) {
-            if (v.free) {
-                auto delta = ((v.disp.module() > t) ? v.disp / v.disp.module() * t : v.disp);
-                max_diff = std::max(delta.x, max_diff);
-                max_diff = std::max(delta.y, max_diff);
-                v.pos = v.pos + delta;
-            }
-            v.pos.x = fmin(W, fmax(-W, v.pos.x));
-            v.pos.y = fmin(H, fmax(-H, v.pos.y));
-            v.disp.clear();
-        }
-        t = t / cooling;
-        if (max_diff <= 0.001) break;
-    }
-    auto mnx = (*std::min_element(V.begin(), V.end(), [](auto a, auto b) {
-        return a.pos.x < b.pos.x;
-    })).pos.x;
-    auto mny = (*std::min_element(V.begin(), V.end(), [](auto a, auto b) {
-        return a.pos.y < b.pos.y;
-    })).pos.y;
-    auto mxx = (*std::min_element(V.begin(), V.end(), [](auto a, auto b) {
-        return a.pos.x > b.pos.x;
-    })).pos.x;
-    auto mxy = (*std::min_element(V.begin(), V.end(), [](auto a, auto b) {
-        return a.pos.y > b.pos.y;
-    })).pos.y;
-    for (auto &v : V) {
-        v.pos.x -= mnx;
-        v.pos.y -= mny;
-        v.pos.x /= (mxx - mnx);
-        v.pos.y /= (mxy - mny);
-    }
-
     jdoubleArray res = env->NewDoubleArray(n*2);
     jdouble res_tab[n*2];
-    int j=0;
-    for (auto &v : V) {
-        res_tab[j] = v.pos.x;
-        res_tab[j+n] = v.pos.y;
-        ++j;
+
+    if (n >= 3) {
+        std::vector<NamespaceForVertex::Vertex> V;
+        jint *edge_source = (*env).GetIntArrayElements(tab_edge_source, nullptr);
+        jint *edge_target = (*env).GetIntArrayElements(tab_edge_target, nullptr);
+        jdouble *x = (*env).GetDoubleArrayElements(tab_x, nullptr);
+        jdouble *y = (*env).GetDoubleArrayElements(tab_y, nullptr);
+        std::vector<std::vector<int>> E(n);
+        for (int i = 0; i < n; ++i) {
+            V.emplace_back(i);
+            V[i].setPos(x[i] / 2, y[i] / 2);
+        }
+        for (int i = 0; i < m; ++i) {
+            E[edge_source[i]].push_back(edge_target[i]);
+            E[edge_target[i]].push_back(edge_source[i]);
+        }
+
+        ld area = W * H;
+        ld k = std::sqrt(area / n);
+        ld t = W + H;
+        ld cooling = 1.1;
+        const int iterations = 200;
+        for (int i = 0; i < iterations; ++i) {
+            ld max_diff = 0;
+            forcesIteration(V, E, k, n);
+            for (auto &v : V) {
+                if (v.free) {
+                    auto delta = ((v.disp.module() > t) ? v.disp / v.disp.module() * t : v.disp);
+                    max_diff = std::max(delta.x, max_diff);
+                    max_diff = std::max(delta.y, max_diff);
+                    v.pos = v.pos + delta;
+                }
+                v.pos.x = fmin(W, fmax(-W, v.pos.x));
+                v.pos.y = fmin(H, fmax(-H, v.pos.y));
+                v.disp.clear();
+            }
+            t = t / cooling;
+            if (max_diff <= 0.001) break;
+        }
+        auto mnx = (*std::min_element(V.begin(), V.end(), [](auto a, auto b) {
+            return a.pos.x < b.pos.x;
+        })).pos.x;
+        auto mny = (*std::min_element(V.begin(), V.end(), [](auto a, auto b) {
+            return a.pos.y < b.pos.y;
+        })).pos.y;
+        auto mxx = (*std::min_element(V.begin(), V.end(), [](auto a, auto b) {
+            return a.pos.x > b.pos.x;
+        })).pos.x;
+        auto mxy = (*std::min_element(V.begin(), V.end(), [](auto a, auto b) {
+            return a.pos.y > b.pos.y;
+        })).pos.y;
+        for (auto &v : V) {
+            v.pos.x -= mnx;
+            v.pos.y -= mny;
+            v.pos.x /= (mxx - mnx);
+            v.pos.y /= (mxy - mny);
+        }
+
+        int j=0;
+        for (auto &v : V) {
+            res_tab[j] = v.pos.x;
+            res_tab[j+n] = v.pos.y;
+            ++j;
+        }
+    }
+    else{
+        if(n == 1) {
+            res_tab[0] = 0;
+            res_tab[1] = 0;
+        }
+        if(n == 2) {
+            res_tab[0] = 0;
+            res_tab[2] = 0;
+            res_tab[1] = 1;
+            res_tab[3] = 1;
+        }
     }
     env->SetDoubleArrayRegion(res, (jsize)0, (jsize)n*2, res_tab);
     return res;
@@ -110,7 +125,6 @@ Java_com_example_graph_1editor_jni_Tools_arrangePlanar( JNIEnv *env, jobject cla
     jint *edge_target = (*env).GetIntArrayElements(tab_edge_target, nullptr);
     jdouble *x = (*env).GetDoubleArrayElements(tab_x, nullptr);
     jdouble *y = (*env).GetDoubleArrayElements(tab_y, nullptr);
-    // TODO: solve for several connectivity component
     std::vector<std::vector<int>> E(n);
 
     // normalize the vertex positions
