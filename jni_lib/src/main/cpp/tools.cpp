@@ -221,7 +221,15 @@ Java_com_example_graph_1editor_jni_Tools_makePlanar( JNIEnv *env, jobject clazz,
     }
 
     auto G = make_graph(n, edges_input);
-    auto faces = triangulate(G);
+    std::vector<Face> faces;
+    bool is_planar = triangulate(G, faces);
+    if (!is_planar) {
+        jdoubleArray res = env->NewDoubleArray(1);
+        jdouble res_tab[1];
+        res_tab[0] = -6969696969696969.;
+        env->SetDoubleArrayRegion(res, (jsize)0, (jsize)1, res_tab);
+        return res;
+    }
     auto orig_order_set = compressFaces(faces);
     auto orig_order = std::vector<Vertex*>(orig_order_set.begin(), orig_order_set.end());
     auto res1 = findCanonicalOrder(faces);

@@ -4,17 +4,22 @@ import graph_editor.geometry.Point;
 import graph_editor.graph.*;
 import com.example.graph_editor.jni.Tools;
 
+@SuppressWarnings("unused")
 public class PlanarGraphVisualizer {
-    public <T extends Graph> GraphVisualization<T> generateVisual(T graph, GraphVisualization<T> graphVisualization, String type) {
+    enum PlanarAlgorithm {
+        fixArrangingWithForces,
+        fixPlanarArranging,
+        findPlanarArrange,
+    }
+    @SuppressWarnings("unused")
+    public <T extends Graph> GraphVisualization<T> generateVisual(T graph, GraphVisualization<T> graphVisualization, PlanarAlgorithm type) {
         double[] tabX = new double[graph.getVertices().size()];
         double[] tabY = new double[graph.getVertices().size()];
         int[] tabEdgeSource = new int[graph.getEdges().size()];
         int[] tabEdgeTarget = new int[graph.getEdges().size()];
-        System.out.println(graph.getVertices().size());
+
         for(Vertex vertex : graph.getVertices()) {
             Point point = graphVisualization.getVertexPoint(vertex);
-            System.out.println(vertex.getIndex());
-            System.out.println(point);
             tabX[vertex.getIndex()] = point.getX();
             tabY[vertex.getIndex()] = point.getY();
         }
@@ -24,24 +29,24 @@ public class PlanarGraphVisualizer {
             tabEdgeTarget[j] = edge.getTarget().getIndex();
             j++;
         }
-        System.out.println(type);
         double[] new_pos;
         Tools t = new Tools();
         switch (type) {
-            case "arrange": {
+            case fixArrangingWithForces: {
                 new_pos = t.arrange(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
                 break;
             }
-            case "arrangePlanar": {
+            case fixPlanarArranging: {
                 new_pos = t.arrangePlanar(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
                 break;
             }
-            case "planar": {
+            case findPlanarArrange: {
                 new_pos = t.makePlanar(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
+                // TODO: returns6969696969696969 if not planar. idk if we could import constant or not from jni
                 break;
             }
             default: {
-                throw new RuntimeException("Algorithm unknown");
+                throw new RuntimeException("Algorithm unknown, fix enum");
             }
         }
         GraphVisualizationImpl<T> visualization = new GraphVisualizationImpl<>(graph);
