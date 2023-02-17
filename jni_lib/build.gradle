@@ -25,7 +25,11 @@ task compileJNI {
   dependsOn compileJava
   doLast {
     exec {
-      commandLine 'sh', '-c', 'mkdir -p build/natives && cd build/natives && cmake ../.. && make && mkdir -p ~/.m2 && cp lib/libtools.so ~/.m2/'
+      if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '-c', 'mkdir -p build/natives && cd build/natives && cmake ../.. && make && mkdir -p ~/.m2 && cp lib/libtools.so ~/.m2/'
+      } else {
+        commandLine 'sh', '-c', 'mkdir -p build/natives && cd build/natives && cmake ../.. && make && mkdir -p ~/.m2 && cp lib/libtools.so ~/.m2/'
+      }
     }
   }
 }
