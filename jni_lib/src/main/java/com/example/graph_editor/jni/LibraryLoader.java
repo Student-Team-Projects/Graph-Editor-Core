@@ -23,7 +23,9 @@ public class LibraryLoader {
         try {
             final File libfile = File.createTempFile(name, ".lib");
             libfile.deleteOnExit();
-            assert url != null;
+            if (url == null) {
+                return false;
+            }
             final InputStream in = url.openStream();
             final OutputStream out = new BufferedOutputStream(Files.newOutputStream(libfile.toPath()));
             int len;
@@ -34,9 +36,7 @@ public class LibraryLoader {
             in.close();
             System.load(libfile.getAbsolutePath());
             success = true;
-        } catch (Exception ignored) {
-        }
-        System.err.println(10);
+        } catch (Exception ignored) {}
         return success;
     }
 }

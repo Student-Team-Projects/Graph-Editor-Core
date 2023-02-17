@@ -17,7 +17,7 @@ class ToolsTest {
         int[] arrit = {1, 2};
         tools.arrange(3, 2, x, y, arris, arrit);
         tools.arrangePlanar(3, 2, x, y, arris, arrit);
-        double[] planarEmbedding = tools.makePlanar(2, 1, x, y, arris, arrit);
+        double[] planarEmbedding = tools.makePlanar(3, 2, x, y, arris, arrit);
         System.out.println(planarEmbedding[0] + " " + planarEmbedding[1]);
     }
 
