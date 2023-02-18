@@ -44,7 +44,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.example'
             artifactId = 'graph_editor_core'
-            version = "1.0.12"
+            version = "1.0.13"
             from components.java
         }
     }

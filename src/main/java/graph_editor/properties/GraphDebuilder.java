@@ -13,7 +13,7 @@ public abstract class GraphDebuilder {
             PropertySupportingGraph graph,
             GenericGraphBuilder<? extends Graph> builder,
             GraphVisualizationBuilder visualizer,
-            Collection<Map.Entry<Vertex, Point>> coordinates
+            Map<Vertex, Point> coordinates
     ) {
         Map<Vertex, Vertex> vCorrespondence = new HashMap<>();
         Map<Edge, Edge> eCorrespondence = new HashMap<>();
@@ -26,29 +26,37 @@ public abstract class GraphDebuilder {
                     builder.addEdge(edge.getSource().getIndex(), edge.getTarget().getIndex()).get()
             );
         });
-
-        PropertyGraphBuilder propertyGraphBuilder = new PropertyGraphBuilder(builder.build());
+        PropertyGraphBuilder propertyGraphBuilder = new PropertyGraphBuilder(builder);
         graph.getExtendedElements().forEach(propertyGraphBuilder::addExtendedElement);
-        graph.getPropertiesNames().forEach(propertyName -> {
-            propertyGraphBuilder.registerProperty(propertyName);
-            graph.getVerticesWithProperty(propertyName).forEach(propertyVertex -> {
+        copyProperties(graph, propertyGraphBuilder, vCorrespondence, eCorrespondence);
+        coordinates.forEach((vertex, point) -> visualizer.addCoordinates(vCorrespondence.get(vertex), point));
+        return propertyGraphBuilder;
+    }
+
+    public static void copyProperties(
+            PropertySupportingGraph source,
+            PropertyGraphBuilder target,
+            Map<Vertex, Vertex> vCorrespondence,
+            Map<Edge, Edge> eCorrespondence
+    ) {
+        source.getPropertiesNames().forEach(propertyName -> {
+            target.registerProperty(propertyName);
+            source.getVerticesWithProperty(propertyName).forEach(propertyVertex -> {
                 Vertex corresponding = vCorrespondence.get(propertyVertex);
-                propertyGraphBuilder.addElementProperty(
-                    corresponding,
-                    propertyName,
-                    graph.getPropertyValue(propertyName, propertyVertex)
-                );
-            });
-            graph.getEdgesWithProperty(propertyName).forEach(propertyEdge -> {
-                Edge corresponding = eCorrespondence.get(propertyEdge);
-                propertyGraphBuilder.addElementProperty(
+                target.addElementProperty(
                         corresponding,
                         propertyName,
-                        graph.getPropertyValue(propertyName, propertyEdge)
+                        source.getPropertyValue(propertyName, propertyVertex)
+                );
+            });
+            source.getEdgesWithProperty(propertyName).forEach(propertyEdge -> {
+                Edge corresponding = eCorrespondence.get(propertyEdge);
+                target.addElementProperty(
+                        corresponding,
+                        propertyName,
+                        source.getPropertyValue(propertyName, propertyEdge)
                 );
             });
         });
-        coordinates.forEach(e -> visualizer.addCoordinates(e.getKey(), e.getValue()));
-        return propertyGraphBuilder;
     }
 }
