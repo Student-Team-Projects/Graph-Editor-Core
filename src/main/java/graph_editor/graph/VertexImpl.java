@@ -32,7 +32,7 @@ class VertexImpl implements Vertex {
 
     @Override
     public List<Vertex> getAdjacent() {
-        return edges.stream().map(edge -> edge.getTarget()).collect(Collectors.toList());
+        return edges.stream().map(edge -> edge.getOther(this)).collect(Collectors.toList());
     }
 
     @Override

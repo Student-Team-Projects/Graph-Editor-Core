@@ -4,7 +4,6 @@ import java.util.*;
 import java.io.*;
 
 public class DirectedGraph implements Graph, Serializable {
-    @Serial
     private static final long serialVersionUID = 1L;
     private List<Edge> edges;
     private List<? extends Vertex> vertices;
@@ -63,16 +62,21 @@ public class DirectedGraph implements Graph, Serializable {
         }
 
         @Override
-        public void addEdge(int sourceIndex, int targetIndex) {
+        public Optional<Edge> addEdge(int sourceIndex, int targetIndex) {
             if (sourceIndex >= vertices.size() || targetIndex >= vertices.size()) {
                 throw new IllegalArgumentException("Invalid source or target index");
+            }
+            if (sourceIndex == targetIndex) {
+                return Optional.empty();
             }
             Vertex source = vertices.get(sourceIndex);
             Edge edge = new EdgeImpl(source, vertices.get(targetIndex));
             if (!source.getEdges().contains(edge)) {
                 source.getEdges().add(edge);
                 edges.add(edge);
+                return Optional.of(edge);
             }
+            return Optional.empty();
         }
 
         @Override
@@ -81,7 +85,6 @@ public class DirectedGraph implements Graph, Serializable {
         }
     }
 
-    @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
         oos.writeInt(vertices.size());
@@ -92,7 +95,6 @@ public class DirectedGraph implements Graph, Serializable {
         }
     }
 
-    @Serial
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         long serialUID = ois.readLong();
         if (serialUID != serialVersionUID) {

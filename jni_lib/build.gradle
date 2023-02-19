@@ -1,0 +1,69 @@
+plugins {
+  id 'java'
+  id 'java-library'
+}
+
+sourceCompatibility = 8
+
+test {
+  useJUnitPlatform()
+}
+
+sourceSets {
+  main {
+    resources {
+      srcDirs "src/main/resources", "build/natives/lib"
+    }
+  }
+}
+
+compileJava {
+  options.compilerArgs += ["-h", file("src/main/include")]
+}
+
+task compileJNI {
+  dependsOn compileJava
+  doLast {
+    exec {
+      if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '-c', 'mkdir -p build/natives && cd build/natives && cmake ../.. && make && mkdir -p ~/.m2 && cp lib/libtools.so ~/.m2/'
+      } else {
+        commandLine 'sh', '-c', 'mkdir -p build/natives && cd build/natives && cmake ../.. && make && mkdir -p ~/.m2 && cp lib/libtools.so ~/.m2/'
+      }
+    }
+  }
+}
+
+clean.doFirst {
+  delete fileTree('src/main/include') {
+    include 'jni_*.h'
+  }
+}
+
+processResources {
+  dependsOn compileJNI
+}
+
+tasks.withType(Test) {
+  systemProperty "java.library.path", "build/natives/lib"
+  testLogging.showStandardStreams = false
+}
+
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+publishing {
+  publications {
+    jni(MavenPublication) {
+      groupId = 'java'
+      artifactId = 'jni_lib'
+      version = "unspecified"
+      from components.java
+    }
+  }
+  repositories {
+    mavenLocal()
+  }
+}

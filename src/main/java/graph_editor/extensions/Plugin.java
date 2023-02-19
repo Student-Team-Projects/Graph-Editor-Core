@@ -5,22 +5,27 @@ import graph_editor.draw.point_mapping.CanvasDrawer;
 import graph_editor.draw.point_mapping.PointMapper;
 import graph_editor.properties.PropertySupportingGraph;
 
-public interface Plugin {
-    interface DrawingPlugin extends Plugin {
+import java.util.Collections;
+
+public abstract class Plugin {
+    public interface Drawer {
         IGraphDrawer<PropertySupportingGraph> getGraphDrawer(PointMapper mapper, CanvasDrawer drawer);
     }
-    interface DrawablePropertyUser extends Plugin {
-        Iterable<String> usedDrawablesNames();
+    public Iterable<Drawer> getGraphDrawers() {
+        return Collections.emptyList();
     }
-    interface Proxy {
+    public Iterable<String> usedDrawablesNames() {
+        return Collections.emptyList();
+    }
+    public interface Proxy {
         boolean registerStackCapture(Plugin plugin, String name, StackCapture onSelection);
         boolean unregisterStackCapture(Plugin plugin, String name);
         boolean registerDeclaredPropertiesReader(Plugin plugin, String name, OnPropertyReaderSelection onSelection);
         boolean unregisterDeclaredPropertiesReader(Plugin plugin, String name);
         void releasePluginResources(Plugin plugin);
     }
-    void activate(Proxy proxy);
-    void deactivate(Proxy proxy);
-    boolean supportsDirectedGraphs();
-    boolean supportsUndirectedGraphs();
+    public abstract void activate(Proxy proxy);
+    public abstract void deactivate(Proxy proxy);
+    public abstract boolean supportsDirectedGraphs();
+    public abstract boolean supportsUndirectedGraphs();
 }

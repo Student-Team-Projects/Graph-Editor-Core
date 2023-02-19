@@ -4,9 +4,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class UndirectedGraph implements Graph, Serializable {
-    @Serial
     private static final long serialVersionUID = 1L;
     private List<Edge> edges;
     private List<? extends Vertex> vertices;
@@ -69,19 +69,23 @@ public class UndirectedGraph implements Graph, Serializable {
         }
 
         @Override
-        public void addEdge(int sourceIndex, int targetIndex) {
+        public Optional<Edge> addEdge(int sourceIndex, int targetIndex) {
             if (sourceIndex >= vertices.size() || targetIndex >= vertices.size()) {
                 throw new IllegalArgumentException("Invalid source or target index");
             }
-            Vertex source = vertices.get(sourceIndex);
-            Vertex target = vertices.get(targetIndex);
-            Edge edge = new EdgeImpl(source, target);
-            Edge reverseEdge = new EdgeImpl(target, source);
-            if (!source.getEdges().contains(edge) && !target.getEdges().contains(reverseEdge)) {
-                vertices.get(sourceIndex).getEdges().add(edge);
-                edges.add(edge);
-                System.out.println(edges.size());
+            if (sourceIndex == targetIndex) {
+                return Optional.empty();
             }
+            Vertex source = vertices.get(Math.min(sourceIndex, targetIndex));
+            Vertex target = vertices.get(Math.max(sourceIndex, targetIndex));
+            Edge edge = new EdgeImpl(source, target);
+            if (!source.getEdges().contains(edge)) {
+                source.getEdges().add(edge);
+                target.getEdges().add(edge);
+                edges.add(edge);
+                return Optional.of(edge);
+            }
+            return Optional.empty();
         }
 
         @Override
@@ -90,7 +94,6 @@ public class UndirectedGraph implements Graph, Serializable {
         }
     }
 
-    @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
         oos.writeInt(vertices.size());
@@ -98,14 +101,11 @@ public class UndirectedGraph implements Graph, Serializable {
         for (Edge e : edges) {
             int sourceIndex = e.getSource().getIndex();
             int targetIndex = e.getTarget().getIndex();
-            if (sourceIndex < targetIndex) {
-                oos.writeInt(sourceIndex);
-                oos.writeInt(targetIndex);
-            }
+            oos.writeInt(sourceIndex);
+            oos.writeInt(targetIndex);
         }
     }
 
-    @Serial
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         long serialUID = ois.readLong();
         if (serialUID != serialVersionUID) {

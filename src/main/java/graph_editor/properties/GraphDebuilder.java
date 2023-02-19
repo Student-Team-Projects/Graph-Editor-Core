@@ -1,12 +1,11 @@
 package graph_editor.properties;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import graph_editor.geometry.Point;
-import graph_editor.graph.GenericGraphBuilder;
-import graph_editor.graph.Graph;
-import graph_editor.graph.Vertex;
+import graph_editor.graph.*;
 import graph_editor.visual.GraphVisualizationBuilder;
 
 public abstract class GraphDebuilder {
@@ -14,24 +13,50 @@ public abstract class GraphDebuilder {
             PropertySupportingGraph graph,
             GenericGraphBuilder<? extends Graph> builder,
             GraphVisualizationBuilder visualizer,
-            Collection<Map.Entry<Vertex, Point>> coordinates
+            Map<Vertex, Point> coordinates
     ) {
-        graph.getEdges().forEach(edge -> builder.addEdge(edge.getSource().getIndex(), edge.getTarget().getIndex()));
-
-        PropertyGraphBuilder propertyGraphBuilder = new PropertyGraphBuilder(builder.build());
-        graph.getExtendedElements().forEach(propertyGraphBuilder::addExtendedElement);
-        graph.getPropertiesNames().forEach(propertyName -> {
-            propertyGraphBuilder.registerProperty(propertyName);
-            graph.getElementsWithProperty(propertyName)
-                    .forEach(graphElement ->
-                            propertyGraphBuilder.addElementProperty(
-                                    graphElement,
-                                    propertyName,
-                                    graph.getPropertyValue(propertyName, graphElement)
-                            )
-                    );
+        Map<Vertex, Vertex> vCorrespondence = new HashMap<>();
+        Map<Edge, Edge> eCorrespondence = new HashMap<>();
+        graph.getVertices().forEach(v -> {
+            vCorrespondence.put(v, builder.addVertex());
         });
-        coordinates.forEach(e -> visualizer.addCoordinates(e.getKey(), e.getValue()));
+        graph.getEdges().forEach(edge -> {
+            eCorrespondence.put(
+                    edge,
+                    builder.addEdge(edge.getSource().getIndex(), edge.getTarget().getIndex()).get()
+            );
+        });
+        PropertyGraphBuilder propertyGraphBuilder = new PropertyGraphBuilder(builder);
+        graph.getExtendedElements().forEach(propertyGraphBuilder::addExtendedElement);
+        copyProperties(graph, propertyGraphBuilder, vCorrespondence, eCorrespondence);
+        coordinates.forEach((vertex, point) -> visualizer.addCoordinates(vCorrespondence.get(vertex), point));
         return propertyGraphBuilder;
+    }
+
+    public static void copyProperties(
+            PropertySupportingGraph source,
+            PropertyGraphBuilder target,
+            Map<Vertex, Vertex> vCorrespondence,
+            Map<Edge, Edge> eCorrespondence
+    ) {
+        source.getPropertiesNames().forEach(propertyName -> {
+            target.registerProperty(propertyName);
+            source.getVerticesWithProperty(propertyName).forEach(propertyVertex -> {
+                Vertex corresponding = vCorrespondence.get(propertyVertex);
+                target.addElementProperty(
+                        corresponding,
+                        propertyName,
+                        source.getPropertyValue(propertyName, propertyVertex)
+                );
+            });
+            source.getEdgesWithProperty(propertyName).forEach(propertyEdge -> {
+                Edge corresponding = eCorrespondence.get(propertyEdge);
+                target.addElementProperty(
+                        corresponding,
+                        propertyName,
+                        source.getPropertyValue(propertyName, propertyEdge)
+                );
+            });
+        });
     }
 }

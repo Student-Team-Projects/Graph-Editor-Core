@@ -1,7 +1,5 @@
 package graph_editor.extensions;
 
-import graph_editor.properties.PropertyWriter;
-
 import java.util.List;
 
 public interface OnPropertyReaderSelection {
@@ -9,5 +7,5 @@ public interface OnPropertyReaderSelection {
         String getName();
         void choose();
     }
-    List<SettingChoice> handle(List<PropertyWriter> writers);
+    List<SettingChoice> handle(List<String> availableProperties);
 }

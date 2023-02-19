@@ -44,13 +44,27 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
     }
 
     @Override
-    public Iterable<GraphElement> getElementsWithProperty(String propertyName) {
-        return properties.get(propertyName).graphElementsWithProperty();
+    public Iterable<Vertex> getVerticesWithProperty(String propertyName) {
+        GraphProperty property = properties.get(propertyName);
+        return property != null ? property.graphVerticesWithProperty() : Collections.emptyList();
     }
 
     @Override
-    public String getPropertyValue(String propertyName, GraphElement element) {
-        return properties.get(propertyName).getElementProperty(element);
+    public Iterable<Edge> getEdgesWithProperty(String propertyName) {
+        GraphProperty property = properties.get(propertyName);
+        return property != null ? property.graphEdgesWithProperty() : Collections.emptyList();
+    }
+
+    @Override
+    public String getPropertyValue(String propertyName, Vertex element) {
+        GraphProperty property = properties.get(propertyName);
+        return property != null ? properties.get(propertyName).getElementProperty(element) : null;
+    }
+
+    @Override
+    public String getPropertyValue(String propertyName, Edge element) {
+        GraphProperty property = properties.get(propertyName);
+        return property != null ? properties.get(propertyName).getElementProperty(element) : null;
     }
 
     @Override
@@ -61,45 +75,30 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
                 "\n";
     }
 
-    private enum Tag {
-        vertexTag,
-        edgeTag,
-        extendedTag
-    }
-
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
-        System.out.println("proper saving");
         oos.writeObject(properGraph);
-        System.out.println("proper saved");
         oos.writeInt(extendedGraphElements.size());
         for (Map.Entry<Integer, ExtendedGraphElement> entry : extendedGraphElements.entrySet()) {
             oos.writeInt(entry.getKey());
             oos.writeObject(entry.getValue());
         }
-        System.out.println("extended saved");
         oos.writeInt(properties.values().size());
-        System.out.println("saving properties");
         for (GraphProperty property : properties.values()) {
-            System.out.println("property: " + property.getName());
             oos.writeObject(property.getName());
-            Set<Map.Entry<GraphElement, String>> entries = property.getEntriesWithProperty();
-            oos.writeInt(entries.size());
-            for (Map.Entry<GraphElement, String> entry : entries) {
-                GraphElement element = entry.getKey();
-                if (element instanceof Vertex) {
-                    oos.writeObject(Tag.vertexTag);
-                    oos.writeInt(((Vertex)element).getIndex());
-                } else if (element instanceof Edge) {
-                    oos.writeObject(Tag.edgeTag);
-                    oos.writeInt(((Edge)element).getSource().getIndex());
-                    oos.writeInt(((Edge)element).getTarget().getIndex());
-                } else if (element instanceof ExtendedGraphElement) {
-                    oos.writeObject(Tag.extendedTag);
-                    oos.writeInt(inverseMap.get(element));
-                } else {
-                    throw new IOException(element + " is not serializable");
-                }
+            Set<Map.Entry<Vertex, String>> vEntries = property.getVertexEntriesWithProperty();
+            oos.writeInt(vEntries.size());
+            for (Map.Entry<Vertex, String> entry : vEntries) {
+                Vertex element = entry.getKey();
+                oos.writeInt(element.getIndex());
+                oos.writeObject(entry.getValue());
+            }
+            Set<Map.Entry<Edge, String>> eEntries = property.getEdgeEntriesWithProperty();
+            oos.writeInt(eEntries.size());
+            for (Map.Entry<Edge, String> entry : eEntries) {
+                Edge element = entry.getKey();
+                oos.writeInt(element.getSource().getIndex());
+                oos.writeInt(element.getTarget().getIndex());
                 oos.writeObject(entry.getValue());
             }
         }
@@ -128,22 +127,20 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
         for (int i = 0; i < propertiesNumber; i++) {
             String name = (String) ois.readObject();
             GraphProperty property = new GraphProperty(name);
-            int elementsWithProperty = ois.readInt();
-            for (int j = 0; j < elementsWithProperty; j++) {
-                Tag tag = (Tag) ois.readObject();
-                GraphElement element;
-                if (tag.equals(Tag.vertexTag)) {
-                    int index = ois.readInt();
-                    element = properGraph.getVertices().get(index);
-                } else if (tag.equals(Tag.edgeTag)) {
-                    int sourceIndex = ois.readInt();
-                    int targetIndex = ois.readInt();
-                    element = properGraph.getVertices().get(sourceIndex).getEdges().get(targetIndex);
-                } else if (tag.equals(Tag.extendedTag)) {
-                    element = extendedGraphElements.get(ois.readInt());
-                } else {
-                    throw new IOException("unexpected type of GraphElement");
-                }
+            properties.put(name, property);
+            int verticesWithProperty = ois.readInt();
+            for (int j = 0; j < verticesWithProperty; j++) {
+                int index = ois.readInt();
+                Vertex element = properGraph.getVertices().get(index);
+                String value = (String) ois.readObject();
+                property.addElementProperty(element, value);
+            }
+            int edgesWithProperty = ois.readInt();
+            for (int j = 0; j < edgesWithProperty; j++) {
+                int sourceIndex = ois.readInt();
+                int targetIndex = ois.readInt();
+                List<Edge> edges = properGraph.getVertices().get(sourceIndex).getEdges();
+                Edge element = edges.stream().filter(e -> e.getSource().getIndex() == targetIndex || e.getTarget().getIndex() == targetIndex).findFirst().get();
                 String value = (String) ois.readObject();
                 property.addElementProperty(element, value);
             }

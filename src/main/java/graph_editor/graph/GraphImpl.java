@@ -61,7 +61,6 @@ class GraphImpl implements Graph, Serializable {
         return builder.toString();
     }
 
-    @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
         oos.writeInt(vertices.size());
@@ -72,7 +71,6 @@ class GraphImpl implements Graph, Serializable {
         }
     }
 
-    @Serial
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         long serialUID = ois.readLong();
         if (serialUID != serialVersionUID) {
