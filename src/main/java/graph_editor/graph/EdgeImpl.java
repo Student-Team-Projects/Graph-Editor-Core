@@ -1,5 +1,7 @@
 package graph_editor.graph;
 
+import java.util.Objects;
+
 // Only for this package
 class EdgeImpl implements Edge {
     EdgeImpl(Vertex source, Vertex target) {
@@ -32,6 +34,10 @@ class EdgeImpl implements Edge {
             getTarget().equals(other.getTarget());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSource(), getTarget());
+    }
     private final Vertex source;
     private final Vertex target;
 }

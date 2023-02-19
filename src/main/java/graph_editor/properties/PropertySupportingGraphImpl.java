@@ -45,22 +45,26 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
 
     @Override
     public Iterable<Vertex> getVerticesWithProperty(String propertyName) {
-        return properties.get(propertyName).graphVerticesWithProperty();
+        GraphProperty property = properties.get(propertyName);
+        return property != null ? property.graphVerticesWithProperty() : Collections.emptyList();
     }
 
     @Override
     public Iterable<Edge> getEdgesWithProperty(String propertyName) {
-        return properties.get(propertyName).graphEdgesWithProperty();
+        GraphProperty property = properties.get(propertyName);
+        return property != null ? property.graphEdgesWithProperty() : Collections.emptyList();
     }
 
     @Override
     public String getPropertyValue(String propertyName, Vertex element) {
-        return properties.get(propertyName).getElementProperty(element);
+        GraphProperty property = properties.get(propertyName);
+        return property != null ? properties.get(propertyName).getElementProperty(element) : null;
     }
 
     @Override
     public String getPropertyValue(String propertyName, Edge element) {
-        return properties.get(propertyName).getElementProperty(element);
+        GraphProperty property = properties.get(propertyName);
+        return property != null ? properties.get(propertyName).getElementProperty(element) : null;
     }
 
     @Override
@@ -73,19 +77,14 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
 
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeLong(serialVersionUID);
-        System.out.println("proper saving");
         oos.writeObject(properGraph);
-        System.out.println("proper saved");
         oos.writeInt(extendedGraphElements.size());
         for (Map.Entry<Integer, ExtendedGraphElement> entry : extendedGraphElements.entrySet()) {
             oos.writeInt(entry.getKey());
             oos.writeObject(entry.getValue());
         }
-        System.out.println("extended saved");
         oos.writeInt(properties.values().size());
-        System.out.println("saving properties");
         for (GraphProperty property : properties.values()) {
-            System.out.println("property: " + property.getName());
             oos.writeObject(property.getName());
             Set<Map.Entry<Vertex, String>> vEntries = property.getVertexEntriesWithProperty();
             oos.writeInt(vEntries.size());
@@ -95,6 +94,7 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
                 oos.writeObject(entry.getValue());
             }
             Set<Map.Entry<Edge, String>> eEntries = property.getEdgeEntriesWithProperty();
+            oos.writeInt(eEntries.size());
             for (Map.Entry<Edge, String> entry : eEntries) {
                 Edge element = entry.getKey();
                 oos.writeInt(element.getSource().getIndex());
@@ -127,6 +127,7 @@ public class PropertySupportingGraphImpl implements PropertySupportingGraph, Ser
         for (int i = 0; i < propertiesNumber; i++) {
             String name = (String) ois.readObject();
             GraphProperty property = new GraphProperty(name);
+            properties.put(name, property);
             int verticesWithProperty = ois.readInt();
             for (int j = 0; j < verticesWithProperty; j++) {
                 int index = ois.readInt();
