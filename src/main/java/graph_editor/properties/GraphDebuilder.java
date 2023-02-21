@@ -43,19 +43,23 @@ public abstract class GraphDebuilder {
             target.registerProperty(propertyName);
             source.getVerticesWithProperty(propertyName).forEach(propertyVertex -> {
                 Vertex corresponding = vCorrespondence.get(propertyVertex);
-                target.addElementProperty(
-                        corresponding,
-                        propertyName,
-                        source.getPropertyValue(propertyName, propertyVertex)
-                );
+                if (corresponding != null) {
+                    target.addElementProperty(
+                            corresponding,
+                            propertyName,
+                            source.getPropertyValue(propertyName, propertyVertex)
+                    );
+                }
             });
             source.getEdgesWithProperty(propertyName).forEach(propertyEdge -> {
                 Edge corresponding = eCorrespondence.get(propertyEdge);
-                target.addElementProperty(
-                        corresponding,
-                        propertyName,
-                        source.getPropertyValue(propertyName, propertyEdge)
-                );
+                if (corresponding != null) {
+                    target.addElementProperty(
+                            corresponding,
+                            propertyName,
+                            source.getPropertyValue(propertyName, propertyEdge)
+                    );
+                }
             });
         });
     }
