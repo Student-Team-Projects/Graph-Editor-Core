@@ -1,9 +1,6 @@
-#include <iostream>
 #include "com_example_graph_editor_jni_Tools.h"
-
-#include <jni.h>
-
 #include <iostream>
+#include <jni.h>
 #include <thread>
 #include <atomic>
 #include <cmath>
@@ -218,57 +215,72 @@ Java_com_example_graph_1editor_jni_Tools_makePlanar( JNIEnv *env, jobject clazz,
     jint *edge_target = (*env).GetIntArrayElements(tab_edge_target, nullptr);
     jdouble *x = (*env).GetDoubleArrayElements(tab_x, nullptr);
     jdouble *y = (*env).GetDoubleArrayElements(tab_y, nullptr);
-    std::vector<std::vector<int>> E(n);
-    std::vector<std::pair<int, int>> edges_input;
-    edges_input.reserve(m);
-    for (int i = 0; i < m; ++i) {
-        edges_input.emplace_back(edge_target[i], edge_source[i]);
-    }
-
-    auto G = make_graph(n, edges_input);
-    std::vector<Face> faces;
-    bool is_planar = triangulate(G, faces);
-    if (!is_planar) {
-        jdoubleArray res = env->NewDoubleArray(1);
-        jdouble res_tab[1];
-        res_tab[0] = -6969696969696969.;
-        env->SetDoubleArrayRegion(res, (jsize)0, (jsize)1, res_tab);
-        return res;
-    }
-    auto orig_order_set = compressFaces(faces);
-    auto orig_order = std::vector<Vertex*>(orig_order_set.begin(), orig_order_set.end());
-    auto res1 = findCanonicalOrder(faces);
-    auto res2 = shiftMethod(res1);
-    auto res3 = extractCoordinates(orig_order, res2);
 
     jdoubleArray res = env->NewDoubleArray(n*2);
     jdouble res_tab[n*2];
-    int j=0;
-    double mnx = (*std::min_element(res3.begin(), res3.end(), [](auto a, auto b) {
-        return a.second.x < b.second.x;
-    })).second.x;
-    double mny = (*std::min_element(res3.begin(), res3.end(), [](auto a, auto b) {
-        return a.second.y < b.second.y;
-    })).second.y;
-    double mxx = (*std::max_element(res3.begin(), res3.end(), [](auto a, auto b) {
-        return a.second.x < b.second.x;
-    })).second.x;
-    double mxy = (*std::max_element(res3.begin(), res3.end(), [](auto a, auto b) {
-        return a.second.y < b.second.y;
-    })).second.y;
 
-    for (auto &v : res3) {
-        v.second.x -= mnx;
-        v.second.y -= mny;
-        v.second.x /= (mxx - mnx);
-        v.second.y /= (mxy - mny);
+    if(n >= 3) {
+        std::vector<std::vector<int>> E(n);
+        std::vector<std::pair<int, int>> edges_input;
+        edges_input.reserve(m);
+        for (int i = 0; i < m; ++i) {
+            edges_input.emplace_back(edge_target[i], edge_source[i]);
+        }
+
+        auto G = make_graph(n, edges_input);
+        std::vector<Face> faces;
+        bool is_planar = triangulate(G, faces);
+        if (!is_planar) {
+            res_tab[0] = -6969696969696969.;
+            env->SetDoubleArrayRegion(res, (jsize)0, (jsize)n*2, res_tab);
+            return res;
+        }
+        auto orig_order_set = compressFaces(faces);
+        auto orig_order = std::vector<Vertex*>(orig_order_set.begin(), orig_order_set.end());
+        auto res1 = findCanonicalOrder(faces);
+        auto res2 = shiftMethod(res1);
+        auto res3 = extractCoordinates(orig_order, res2);
+
+        int j=0;
+        double mnx = (*std::min_element(res3.begin(), res3.end(), [](auto a, auto b) {
+            return a.second.x < b.second.x;
+        })).second.x;
+        double mny = (*std::min_element(res3.begin(), res3.end(), [](auto a, auto b) {
+            return a.second.y < b.second.y;
+        })).second.y;
+        double mxx = (*std::max_element(res3.begin(), res3.end(), [](auto a, auto b) {
+            return a.second.x < b.second.x;
+        })).second.x;
+        double mxy = (*std::max_element(res3.begin(), res3.end(), [](auto a, auto b) {
+            return a.second.y < b.second.y;
+        })).second.y;
+
+        for (auto &v : res3) {
+            v.second.x -= mnx;
+            v.second.y -= mny;
+            v.second.x /= (mxx - mnx);
+            v.second.y /= (mxy - mny);
+        }
+
+        for (auto &v : res3) {
+            res_tab[j] = v.second.x;
+            res_tab[j+n] = v.second.y;
+            ++j;
+        }
+    }
+    else{
+        if(n == 1) {
+            res_tab[0] = 0;
+            res_tab[1] = 0;
+        }
+        if(n == 2) {
+            res_tab[0] = 0;
+            res_tab[2] = 0;
+            res_tab[1] = 1;
+            res_tab[3] = 1;
+        }
     }
 
-    for (auto &v : res3) {
-        res_tab[j] = v.second.x;
-        res_tab[j+n] = v.second.y;
-        ++j;
-    }
     env->SetDoubleArrayRegion(res, (jsize)0, (jsize)n*2, res_tab);
     return res;
 }
