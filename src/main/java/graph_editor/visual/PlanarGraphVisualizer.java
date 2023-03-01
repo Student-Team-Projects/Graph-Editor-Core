@@ -43,7 +43,7 @@ public class PlanarGraphVisualizer {
             case findPlanarArrange: {
                 new_pos = t.makePlanar(graph.getVertices().size(), graph.getEdges().size(), tabX, tabY, tabEdgeSource, tabEdgeTarget);
                 if (new_pos[0] == -6969696969696969.) {
-
+                    return graphVisualization;
                 }
                 // TODO: returns -6969696969696969 if not planar. idk if we can import constant or not from jni. imo great constant
                 break;
@@ -58,18 +58,5 @@ public class PlanarGraphVisualizer {
                     vertex, new Point(new_pos[vertex.getIndex()], new_pos[vertex.getIndex() + graph.getVertices().size()]));
         }
         return visualization;
-    }
-
-    public static void main(String[] args) {
-        // TODO: remove before going in production
-        double[] x = {0, 1, 2};
-        double[] y = {0, 1, 2};
-        int[] arris = {0, 1};
-        int[] arrit = {1, 2};
-        Tools tools = new Tools();
-        tools.arrange(3, 2, x, y, arris, arrit);
-        tools.arrangePlanar(3, 2, x, y, arris, arrit);
-        double[] planarEmbedding = tools.makePlanar(2, 1, x, y, arris, arrit);
-        System.out.println(planarEmbedding[0] + " " + planarEmbedding[1]);
     }
 }
